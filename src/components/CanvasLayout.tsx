@@ -49,7 +49,7 @@ export default function CanvasLayout({ children }: CanvasLayoutProps) {
 
                     {/* Post Processing - Desktop Only */}
                     {!isMobile && (
-                        <EffectComposer disableNormalPass>
+                        <EffectComposer enableNormalPass={false}>
                             <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} intensity={1.5} />
                             <ScrollAberration />
                         </EffectComposer>
