@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Mesh, Group } from "three";
-import { Float, useGLTF, Center } from "@react-three/drei";
+import { Float, useGLTF, Center, Resize } from "@react-three/drei";
 import { useStore } from "@/lib/store";
 
 const metalMaterialProps = {
@@ -60,10 +60,18 @@ export default function Can({ color }: CanProps) {
     return (
         <Float speed={2} rotationIntensity={1} floatIntensity={1}>
             <group ref={groupRef} dispose={null}>
-                {/* Center helps align the model if the origin is off */}
-                <Center>
-                    <primitive object={clone} scale={[2, 2, 2]} />
-                </Center>
+                {/* Resize ensures the model fits within a standard 1 unit box, then we scale it up */}
+                <Resize scale={3}>
+                    <Center>
+                        <primitive object={clone} />
+                    </Center>
+                </Resize>
+                
+                {/* FALLBACK: Wireframe box to verify Canvas is working. If you see this but no can, it's a model issue. */}
+                {/* <mesh>
+                    <boxGeometry args={[2, 4, 2]} />
+                    <meshBasicMaterial color="red" wireframe />
+                </mesh> */}
             </group>
         </Float>
     );

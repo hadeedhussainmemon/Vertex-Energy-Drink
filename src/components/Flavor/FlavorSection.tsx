@@ -10,7 +10,8 @@ const flavors = [
         gradient: "from-green-400 to-green-600",
         textColor: "text-neon-green",
         hex: "#39FF14",
-        image: "/images/cyber_citrus.png"
+        image: "/images/cyber_citrus.webp",
+        bgImage: "/images/cyber_citrus_bg.webp"
     },
     {
         name: "Neon Berry",
@@ -18,7 +19,8 @@ const flavors = [
         gradient: "from-blue-400 to-blue-600",
         textColor: "text-neon-blue",
         hex: "#00F0FF",
-        image: "/images/neon_berry.png"
+        image: "/images/neon_berry.webp",
+        bgImage: "/images/neon_berry_bg.webp"
     },
     {
         name: "Plasma Punch",
@@ -26,7 +28,8 @@ const flavors = [
         gradient: "from-red-400 to-red-600",
         textColor: "text-neon-red",
         hex: "#FF003C",
-        image: "/images/apex_red.png"
+        image: "/images/apex_red.webp",
+        bgImage: "/images/apex_red_bg.webp"
     }
 ];
 
@@ -51,12 +54,23 @@ export default function FlavorSection() {
                             onMouseEnter={() => setFlavorColor(f.hex)}
                             className="h-[500px] flex flex-col items-center justify-between p-8 bg-glass rounded-3xl hover:border-white/30 transition-colors group cursor-pointer relative overflow-hidden"
                         >
-                            {/* Floating Glow */}
-                            <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-r ${f.gradient} blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity`} />
+                            {/* Static Background Layer (User requested separation) */}
+                            {f.bgImage && (
+                                <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl">
+                                    <img
+                                        src={f.bgImage}
+                                        alt=""
+                                        className="w-full h-full object-cover opacity-30 grayscale transition-transform duration-700 group-hover:scale-105"
+                                    />
+                                </div>
+                            )}
 
-                            {/* Can Image */}
+                            {/* Existing Glow (Static) */}
+                            <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 bg-gradient-to-r ${f.gradient} blur-[80px] opacity-20 group-hover:opacity-40 transition-opacity z-0`} />
+
+                            {/* Rotating Product Layer */}
                             <motion.div
-                                className="relative w-full h-[60%] mt-8"
+                                className="relative w-full h-[60%] mt-8 z-10"
                                 whileHover={{ scale: 1.1, rotate: 6 }}
                                 transition={{ type: "spring", stiffness: 300 }}
                             >
