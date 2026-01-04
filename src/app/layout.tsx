@@ -1,0 +1,57 @@
+import type { Metadata } from "next";
+import { Inter, Orbitron } from "next/font/google"; // Import Orbitron for headings
+import "./globals.css";
+import SmoothScroll from "@/components/ui/SmoothScroll";
+
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" });
+
+export const metadata: Metadata = {
+  title: "VERTEX | Reach Your Peak",
+  description: "The next generation of hydration. Zero sugar. Infinite power. Experience the future of energy drinks.",
+  keywords: ["energy drink", "vertex", "vertex energy", "3d website", "three.js", "next.js"],
+  openGraph: {
+    title: "VERTEX | Reach Your Peak",
+    description: "Fuel your grind with the most immersive energy drink experience.",
+    type: "website",
+    locale: "en_US",
+    siteName: "VERTEX Energy",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VERTEX | Reach Your Peak",
+    description: "The next generation of hydration.",
+  }
+};
+
+import CustomCursor from "@/components/ui/CustomCursor";
+import CartDrawer from "@/components/ui/CartDrawer";
+
+import NoiseOverlay from "@/components/ui/NoiseOverlay";
+import Preloader from "@/components/ui/Preloader";
+import CommandMenu from "@/components/ui/CommandMenu";
+
+import { SoundProvider } from "@/context/SoundContext";
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
+      <body className="antialiased font-sans selection:bg-neon-blue selection:text-black">
+        <SoundProvider>
+          <Preloader />
+          <CommandMenu />
+          <NoiseOverlay />
+          <CustomCursor />
+          <CartDrawer />
+          <SmoothScroll>
+            {children}
+          </SmoothScroll>
+        </SoundProvider>
+      </body>
+    </html>
+  );
+}
