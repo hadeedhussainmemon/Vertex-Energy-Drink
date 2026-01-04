@@ -33,9 +33,10 @@ export default function Navbar() {
             </Link>
 
             <div className="hidden md:flex gap-8 font-bold text-sm tracking-widest">
-                <Link href="#flavors" className="hover:text-neon-blue transition-colors" onMouseEnter={playHover} onClick={playClick}>FLAVORS</Link>
-                <Link href="#ingredients" className="hover:text-neon-green transition-colors" onMouseEnter={playHover} onClick={playClick}>INGREDIENTS</Link>
-                <Link href="#shop" className="hover:text-neon-red transition-colors" onMouseEnter={playHover} onClick={playClick}>SHOP</Link>
+                <Link href="/#shop" className="hover:text-neon-red transition-colors" onMouseEnter={playHover} onClick={playClick}>SHOP</Link>
+                <Link href="/about" className="hover:text-neon-blue transition-colors" onMouseEnter={playHover} onClick={playClick}>ABOUT</Link>
+                <Link href="/faq" className="hover:text-white transition-colors" onMouseEnter={playHover} onClick={playClick}>FAQ</Link>
+                <Link href="/contact" className="hover:text-neon-green transition-colors" onMouseEnter={playHover} onClick={playClick}>CONTACT</Link>
             </div>
 
             <div className="flex items-center gap-6">

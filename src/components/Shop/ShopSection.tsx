@@ -97,12 +97,20 @@ export default function ShopSection() {
 
                                     <div className="flex justify-between items-center border-t border-white/10 pt-4">
                                         <span className="text-neon-blue font-mono text-xl font-bold">${p.price}</span>
-                                        <button
-                                            onClick={() => handleAdd(p)}
-                                            className="bg-white text-black px-6 py-2 rounded-lg font-black tracking-wide hover:bg-neon-blue hover:scale-105 transition-all"
-                                        >
-                                            ADD_TO_CART
-                                        </button>
+                                        <div className="flex gap-2">
+                                            <a
+                                                href={`/product/${p._id}`}
+                                                className="bg-zinc-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-white hover:text-black transition-all text-sm flex items-center"
+                                            >
+                                                VIEW
+                                            </a>
+                                            <button
+                                                onClick={() => handleAdd(p)}
+                                                className="bg-white text-black px-4 py-2 rounded-lg font-black tracking-wide hover:bg-neon-blue hover:scale-105 transition-all text-sm"
+                                            >
+                                                ADD
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </motion.div>
