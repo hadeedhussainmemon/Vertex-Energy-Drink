@@ -14,13 +14,14 @@ import usePerformance from "@/hooks/usePerformance";
 
 interface CanvasLayoutProps {
     children: React.ReactNode;
+    className?: string;
 }
 
-export default function CanvasLayout({ children }: CanvasLayoutProps) {
+export default function CanvasLayout({ children, className = "fixed inset-0 z-0 pointer-events-none" }: CanvasLayoutProps) {
     const { isMobile, dpr } = usePerformance();
 
     return (
-        <div className="fixed inset-0 z-0 pointer-events-none">
+        <div className={className}>
             <Canvas
                 camera={{ position: [0, 0, 5], fov: 45 }}
                 gl={{

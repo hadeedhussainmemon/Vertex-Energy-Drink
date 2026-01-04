@@ -51,7 +51,7 @@ export default function ProductDetailView({ product }: { product: Product }) {
                         transition={{ duration: 1 }}
                         className="w-full h-full"
                     >
-                        <CanvasLayout>
+                        <CanvasLayout className="w-full h-full">
                             <ambientLight intensity={0.5} />
                             <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
                             <Can color={product.color} />
