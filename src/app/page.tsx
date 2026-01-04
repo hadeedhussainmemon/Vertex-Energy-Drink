@@ -5,8 +5,6 @@ import HeroSection from "@/components/Hero/HeroSection";
 import FlavorSection from "@/components/Flavor/FlavorSection";
 import IngredientSection from "@/components/Ingredients/IngredientSection";
 import ShopSection from "@/components/Shop/ShopSection";
-import Navbar from "@/components/ui/Navbar";
-import Footer from "@/components/ui/Footer";
 
 // Lazy load the 3D Canvas to reduce Total Blocking Time (TBT)
 const CanvasLayout = dynamic(() => import("@/components/CanvasLayout"), {
@@ -29,12 +27,10 @@ export default function Home() {
 
       {/* HTML Content Layer */}
       <div className="relative z-10">
-        <Navbar />
         <HeroSection />
         <FlavorSection />
         <IngredientSection />
         <ShopSection />
-        <Footer />
       </div>
     </main>
   );

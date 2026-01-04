@@ -26,6 +26,7 @@ export const metadata: Metadata = {
 
 import CustomCursor from "@/components/ui/CustomCursor";
 import CartDrawer from "@/components/ui/CartDrawer";
+import MainLayout from "@/components/layout/MainLayout";
 
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
 import Preloader from "@/components/ui/Preloader";
@@ -48,7 +49,9 @@ export default function RootLayout({
           <CustomCursor />
           <CartDrawer />
           <SmoothScroll>
-            {children}
+            <MainLayout>
+              {children}
+            </MainLayout>
           </SmoothScroll>
         </SoundProvider>
       </body>
