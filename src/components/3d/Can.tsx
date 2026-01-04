@@ -17,38 +17,42 @@ interface CanProps {
     color?: string;
 }
 
+// Map colors to model files
+const getModelPath = (color: string) => {
+    if (!color) return "/models/cyber_citrus.glb";
+    switch (color.toLowerCase()) {
+        case "#39ff14": return "/models/cyber_citrus.glb"; // Green
+        case "#00f0ff": return "/models/neon_berry.glb";   // Blue
+        case "#ff003c": return "/models/apex_red.glb";     // Red
+        default: return "/models/cyber_citrus.glb";        // Fallback
+    }
+};
+
 export default function Can({ color }: CanProps) {
     const groupRef = useRef<Group>(null);
     const storeColor = useStore((state) => state.activeFlavorColor);
     const finalColor = color || storeColor;
+    const modelPath = getModelPath(finalColor);
 
-    // Load the GLB model
-    const { scene } = useGLTF("/models/can.glb");
+    // Load the specific GLB model based on color/flavor
+    const { scene } = useGLTF(modelPath);
 
-    // Clone the scene so we can mutate materials per instance without affecting others
-    // (Important if we have multiple cans on screen with different colors)
+    // Clone to allow independent material manipulation
     const clone = scene.clone();
 
-    // Apply color to the can body
-    // We assume the model has a material we can tint. 
-    // We traverse to find meshes and apply the color.
+    // Traverse and apply the color/material settings
+    // This assumes the model has standard materials that can be tinted.
+    // If the GLB is already fully textured, we might NOT want to override colors.
+    // However, for consistency with the design system (neon glow), we apply the tint.
     clone.traverse((child: any) => {
         if (child.isMesh) {
-            // Apply color to the material
-            // We clone material to avoid side-effects if shared
             child.material = child.material.clone();
 
-            // Heuristic: If it's a "Label" or "Body" or just the main mesh, tint it. 
-            // If the model has separate parts (lid, tab), we might want to skip them if they are silver.
-            // For now, let's try tinting everything that isn't clearly metallic "silver" by name, 
-            // OR just tint everything to base color if it's a simple model.
-            // Let's assume the user wants the whole can body colored.
-            // A common issue is tinting the lid. Let's try to preserve standard materials if possible.
-            // Simple approach: Apply color to `color` property.
-
+            // Only apply color if it's the main body, avoiding lids if possible.
+            // Since we don't know the exact mesh names, we enable full tint for now.
+            // If the user wants original textures, we would remove this line.
             child.material.color.set(finalColor);
 
-            // Enhance material for realism
             child.material.metalness = 0.6;
             child.material.roughness = 0.2;
             child.material.envMapIntensity = 1.2;
@@ -64,5 +68,7 @@ export default function Can({ color }: CanProps) {
     );
 }
 
-// Preload the model
-useGLTF.preload("/models/can.glb");
+// Preload all models to prevent stuttering
+useGLTF.preload("/models/cyber_citrus.glb");
+useGLTF.preload("/models/neon_berry.glb");
+useGLTF.preload("/models/apex_red.glb");
