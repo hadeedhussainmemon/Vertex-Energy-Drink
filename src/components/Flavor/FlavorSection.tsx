@@ -3,30 +3,31 @@
 import { motion } from "framer-motion";
 import { useStore } from "@/lib/store";
 
-{
-    name: "Cyber Citrus",
+const flavors = [
+    {
+        name: "Cyber Citrus",
         desc: "Yuzu + Lemon",
-            gradient: "from-green-400 to-green-600",
-                textColor: "text-neon-green",
-                    hex: "#39FF14",
-                        image: "/images/cyber_citrus.png"
-},
-{
-    name: "Neon Berry",
+        gradient: "from-green-400 to-green-600",
+        textColor: "text-neon-green",
+        hex: "#39FF14",
+        image: "/images/cyber_citrus.png"
+    },
+    {
+        name: "Neon Berry",
         desc: "Blue Raspberry + Guarana",
-            gradient: "from-blue-400 to-blue-600",
-                textColor: "text-neon-blue",
-                    hex: "#00F0FF",
-                        image: "/images/neon_berry.png"
-},
-{
-    name: "Plasma Punch",
+        gradient: "from-blue-400 to-blue-600",
+        textColor: "text-neon-blue",
+        hex: "#00F0FF",
+        image: "/images/neon_berry.png"
+    },
+    {
+        name: "Plasma Punch",
         desc: "Tropical Fusion",
-            gradient: "from-red-400 to-red-600",
-                textColor: "text-neon-red",
-                    hex: "#FF003C",
-                        image: "/images/apex_red.png"
-}
+        gradient: "from-red-400 to-red-600",
+        textColor: "text-neon-red",
+        hex: "#FF003C",
+        image: "/images/apex_red.png"
+    }
 ];
 
 export default function FlavorSection() {
