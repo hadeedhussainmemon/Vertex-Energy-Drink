@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { Mesh, Group } from "three";
-import { Float } from "@react-three/drei";
+import { Float, useGLTF } from "@react-three/drei";
 import { useStore } from "@/lib/store";
 
 const metalMaterialProps = {
@@ -22,56 +22,47 @@ export default function Can({ color }: CanProps) {
     const storeColor = useStore((state) => state.activeFlavorColor);
     const finalColor = color || storeColor;
 
+    // Load the GLB model
+    const { scene } = useGLTF("/models/can.glb");
+
+    // Clone the scene so we can mutate materials per instance without affecting others
+    // (Important if we have multiple cans on screen with different colors)
+    const clone = scene.clone();
+
+    // Apply color to the can body
+    // We assume the model has a material we can tint. 
+    // We traverse to find meshes and apply the color.
+    clone.traverse((child: any) => {
+        if (child.isMesh) {
+            // Apply color to the material
+            // We clone material to avoid side-effects if shared
+            child.material = child.material.clone();
+
+            // Heuristic: If it's a "Label" or "Body" or just the main mesh, tint it. 
+            // If the model has separate parts (lid, tab), we might want to skip them if they are silver.
+            // For now, let's try tinting everything that isn't clearly metallic "silver" by name, 
+            // OR just tint everything to base color if it's a simple model.
+            // Let's assume the user wants the whole can body colored.
+            // A common issue is tinting the lid. Let's try to preserve standard materials if possible.
+            // Simple approach: Apply color to `color` property.
+
+            child.material.color.set(finalColor);
+
+            // Enhance material for realism
+            child.material.metalness = 0.6;
+            child.material.roughness = 0.2;
+            child.material.envMapIntensity = 1.2;
+        }
+    });
+
     return (
         <Float speed={2} rotationIntensity={1} floatIntensity={1}>
             <group ref={groupRef} dispose={null}>
-                {/* Main Body (Label) */}
-                <mesh position={[0, 0, 0]}>
-                    <cylinderGeometry args={[1, 1, 3.5, 64]} />
-                    <meshStandardMaterial
-                        color={finalColor}
-                        metalness={0.6}
-                        roughness={0.2}
-                        envMapIntensity={1.2}
-                    />
-                </mesh>
-
-                {/* Top Taper (Neck) */}
-                <mesh position={[0, 1.85, 0]}>
-                    <cylinderGeometry args={[0.8, 1.01, 0.4, 64]} />
-                    <meshStandardMaterial {...metalMaterialProps} />
-                </mesh>
-
-                {/* Top Rim (Lip) */}
-                <mesh position={[0, 2.07, 0]}>
-                    <torusGeometry args={[0.78, 0.04, 16, 64]} />
-                    <meshStandardMaterial {...metalMaterialProps} />
-                </mesh>
-
-                {/* Top Lid surface */}
-                <mesh position={[0, 2.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-                    <circleGeometry args={[0.78, 64]} />
-                    <meshStandardMaterial {...metalMaterialProps} />
-                </mesh>
-
-                {/* Pull Tab (Simplified) */}
-                <mesh position={[0.2, 2.06, 0.1]} rotation={[-Math.PI / 2, 0, 0.5]}>
-                    <boxGeometry args={[0.3, 0.5, 0.02]} />
-                    <meshStandardMaterial color="#aaaaaa" metalness={0.9} roughness={0.3} />
-                </mesh>
-
-                {/* Bottom Taper */}
-                <mesh position={[0, -1.85, 0]}>
-                    <cylinderGeometry args={[1.01, 0.8, 0.4, 64]} />
-                    <meshStandardMaterial {...metalMaterialProps} />
-                </mesh>
-
-                {/* Bottom Rim */}
-                <mesh position={[0, -2.05, 0]}>
-                    <torusGeometry args={[0.78, 0.04, 16, 64]} />
-                    <meshStandardMaterial {...metalMaterialProps} />
-                </mesh>
+                <primitive object={clone} scale={[2, 2, 2]} />
             </group>
         </Float>
     );
 }
+
+// Preload the model
+useGLTF.preload("/models/can.glb");

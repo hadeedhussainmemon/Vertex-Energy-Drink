@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 
 // Dynamic load for 3D to avoid SSR issues
 import { Canvas } from "@react-three/fiber";
-import { Environment } from "@react-three/drei";
+import { Environment, OrbitControls } from "@react-three/drei";
 
 const Can = dynamic(() => import("@/components/3d/Can"), { ssr: false });
 
@@ -53,12 +53,13 @@ export default function ProductDetailView({ product }: { product: Product }) {
                         transition={{ duration: 1 }}
                         className="w-full h-full"
                     >
-                        <div className="w-full h-full">
-                            <Canvas camera={{ position: [0, 0, 4], fov: 45 }}>
+                        <div className="w-full h-full cursor-grab active:cursor-grabbing">
+                            <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
                                 <ambientLight intensity={0.7} />
                                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
                                 <pointLight position={[-10, -10, -10]} intensity={1} />
                                 <Environment preset="city" />
+                                <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={2} />
                                 <Can color={product.color} />
                             </Canvas>
                         </div>
