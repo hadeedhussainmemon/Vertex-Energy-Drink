@@ -29,7 +29,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     alpha: true,
                     powerPreference: "high-performance"
                 }}
-                dpr={dpr as any}
+                dpr={isMobile ? 1 : dpr as any} // Force 1x DPR on mobile for absolute speed
                 shadows={!isMobile} // Disable shadows on mobile
             >
                 <Suspense fallback={null}>
