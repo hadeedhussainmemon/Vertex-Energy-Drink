@@ -21,7 +21,7 @@ export default function ScrollAberration() {
     }, []);
 
     useFrame((state, delta) => {
-        if (!effectRef.current) return;
+        if (!effectRef.current || !effectRef.current.offset) return;
 
         // Calculate velocity: diff between current and last scroll
         // Damping/Smoothing: Lerp the "target" velocity
@@ -33,11 +33,18 @@ export default function ScrollAberration() {
         const targetOffset = Math.min(velocity * 0.002, 0.05);
 
         // Smoothly interpolate current offset to target
-        // We assume effectRef.current.offset is a Vector2
-        const currentX = effectRef.current.offset.x;
+        // We handle cases where offset might be an array or Vector2
+        const currentX = effectRef.current.offset.x || 0;
         const newOffset = THREE.MathUtils.lerp(currentX, targetOffset, 0.1);
 
-        effectRef.current.offset.set(newOffset, newOffset);
+        // Safely set offset
+        if (effectRef.current.offset.set) {
+            effectRef.current.offset.set(newOffset, newOffset);
+        } else {
+            // Fallback for array or simplistic object
+            effectRef.current.offset.x = newOffset;
+            effectRef.current.offset.y = newOffset;
+        }
 
         // Update last scroll
         lastScrollRef.current = currentScroll;
@@ -47,7 +54,7 @@ export default function ScrollAberration() {
         <ChromaticAberration
             ref={effectRef}
             blendFunction={BlendFunction.NORMAL} // Use NORMAL to just see the shifting channels
-            offset={[0, 0]} // Start at 0
+            offset={[0, 0] as any} // Cast to any to avoid TS type conflicts if strict
             radialModulation={false}
             modulationOffset={0}
         />
