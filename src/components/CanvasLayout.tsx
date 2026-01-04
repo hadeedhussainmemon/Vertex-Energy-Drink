@@ -29,8 +29,8 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     alpha: true,
                     powerPreference: "high-performance"
                 }}
-                dpr={isMobile ? 1 : dpr as any} // Force 1x DPR on mobile for absolute speed
-                shadows={!isMobile} // Disable shadows on mobile
+                dpr={isMobile ? 1 : dpr as any} // Force 1x DPR on mobile
+                shadows={false} // GLOBAL SHADOW DISABLE for performance
             >
                 <Suspense fallback={null}>
                     {/* Lighting - Simplified on Mobile */}
@@ -40,7 +40,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                         angle={0.15}
                         penumbra={1}
                         intensity={1}
-                        castShadow={!isMobile}
+                        castShadow={false}
                     />
                     <pointLight position={[-10, -10, -10]} intensity={1} />
 
@@ -50,7 +50,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
 
                     {/* Post Processing - Desktop Only */}
                     {!isMobile && (
-                        <EffectComposer enableNormalPass={false}>
+                        <EffectComposer enableNormalPass={false} multisampling={0}>
                             <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} intensity={1.5} />
                             <ScrollAberration />
                         </EffectComposer>

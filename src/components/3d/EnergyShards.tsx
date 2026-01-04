@@ -2,54 +2,69 @@
 
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Float } from "@react-three/drei";
 import * as THREE from "three";
 
 export default function EnergyShards({ count = 30 }) {
-    // Generate random positions and data for shards
+    const meshRef = useRef<THREE.InstancedMesh>(null);
+    const dummy = new THREE.Object3D();
+
+    // Generate random data for shards
     const shards = useMemo(() => {
         return new Array(count).fill(0).map(() => ({
-            position: [
-                (Math.random() - 0.5) * 30, // Spread X
-                (Math.random() - 0.5) * 30, // Spread Y
-                (Math.random() - 0.5) * 10 - 5 // Spread Z (mostly behind)
-            ] as [number, number, number],
-            rotation: [
+            position: new THREE.Vector3(
+                (Math.random() - 0.5) * 30,
+                (Math.random() - 0.5) * 30,
+                (Math.random() - 0.5) * 10 - 5
+            ),
+            rotation: new THREE.Euler(
                 Math.random() * Math.PI,
                 Math.random() * Math.PI,
                 Math.random() * Math.PI
-            ] as [number, number, number],
+            ),
             scale: Math.random() * 0.5 + 0.2,
-            speed: Math.random() * 0.5 + 0.2
+            speed: Math.random() * 0.2 + 0.1,
+            time: Math.random() * 100
         }));
     }, [count]);
 
+    useFrame((state, delta) => {
+        if (!meshRef.current) return;
+
+        shards.forEach((shard, i) => {
+            shard.time += delta * shard.speed;
+
+            // Floating Logic (Sine wave offset)
+            const floatY = Math.sin(shard.time) * 0.5;
+            const rotateX = shard.time * 0.2;
+            const rotateY = shard.time * 0.1;
+
+            dummy.position.copy(shard.position);
+            dummy.position.y += floatY;
+
+            dummy.rotation.set(
+                shard.rotation.x + rotateX,
+                shard.rotation.y + rotateY,
+                shard.rotation.z
+            );
+
+            dummy.scale.setScalar(shard.scale);
+            dummy.updateMatrix();
+            meshRef.current!.setMatrixAt(i, dummy.matrix);
+        });
+        meshRef.current.instanceMatrix.needsUpdate = true;
+    });
+
     return (
-        <group>
-            {/* Create Instances for performance */}
-            {shards.map((shard, i) => (
-                <Float
-                    key={i}
-                    speed={shard.speed}
-                    rotationIntensity={2}
-                    floatIntensity={2}
-                    position={shard.position}
-                    rotation={shard.rotation}
-                    scale={shard.scale}
-                >
-                    <mesh>
-                        <tetrahedronGeometry args={[1, 0]} />
-                        <meshStandardMaterial
-                            color="#00f0ff"
-                            emissive="#00f0ff"
-                            emissiveIntensity={2}
-                            wireframe
-                            transparent
-                            opacity={0.3}
-                        />
-                    </mesh>
-                </Float>
-            ))}
-        </group>
+        <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+            <tetrahedronGeometry args={[1, 0]} />
+            <meshStandardMaterial
+                color="#00f0ff"
+                emissive="#00f0ff"
+                emissiveIntensity={2}
+                wireframe
+                transparent
+                opacity={0.3}
+            />
+        </instancedMesh>
     );
 }
