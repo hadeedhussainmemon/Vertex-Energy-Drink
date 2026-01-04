@@ -51,22 +51,11 @@ export default function ProductDetailView({ product }: { product: Product }) {
                         transition={{ duration: 1 }}
                         className="w-full h-full"
                     >
-                        {/* Reusing the Can component but maybe we want to lock it or preset a flavor? 
-                             Currently Can component reads from store or internal state. 
-                             Ideally we pass props to Can to force a texture, but for now we'll use the image.
-                             Note: The existing Can component might need refactoring to accept 'texture' prop.
-                             For this MVP expansion, let's use the static image if 3D is too complex to decouple quickly,
-                             OR render the CanvasLayout. 
-                             Let's try standard image for reliability and speed, OR wrap the Can if flexible.
-                             
-                             Decision: Use High-Res Image for 'Details' to ensure texture matching 100% 
-                             without complex 3D state texture swapping logic right now.
-                         */}
-                        <img
-                            src={product.image}
-                            alt={product.name}
-                            className="w-full h-full object-contain drop-shadow-[0_0_50px_rgba(255,255,255,0.2)]"
-                        />
+                        <CanvasLayout>
+                            <ambientLight intensity={0.5} />
+                            <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
+                            <Can color={product.color} />
+                        </CanvasLayout>
                     </motion.div>
                 </div>
 

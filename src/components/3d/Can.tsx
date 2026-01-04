@@ -13,9 +13,14 @@ const metalMaterialProps = {
     envMapIntensity: 1.5
 };
 
-export default function Can() {
+interface CanProps {
+    color?: string;
+}
+
+export default function Can({ color }: CanProps) {
     const groupRef = useRef<Group>(null);
-    const activeFlavorColor = useStore((state) => state.activeFlavorColor);
+    const storeColor = useStore((state) => state.activeFlavorColor);
+    const finalColor = color || storeColor;
 
     return (
         <Float speed={2} rotationIntensity={1} floatIntensity={1}>
@@ -24,7 +29,7 @@ export default function Can() {
                 <mesh position={[0, 0, 0]}>
                     <cylinderGeometry args={[1, 1, 3.5, 64]} />
                     <meshStandardMaterial
-                        color={activeFlavorColor}
+                        color={finalColor}
                         metalness={0.6}
                         roughness={0.2}
                         envMapIntensity={1.2}

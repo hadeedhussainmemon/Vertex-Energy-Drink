@@ -30,14 +30,24 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-white mb-6">LEGAL</h4>
                         <ul className="space-y-2 text-gray-400 text-sm">
-                            <li><Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Terms of Service</Link></li>
-                            <li><Link href="#" className="hover:text-white transition-colors">Shipping Policy</Link></li>
+                            <li><Link href="/legal" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/legal" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                            <li><Link href="/legal" className="hover:text-white transition-colors">Shipping Policy</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h4 className="font-bold text-white mb-6">STAY CHARGED</h4>
+                        <p className="text-xs text-gray-500 mb-4">Join the inner circle.</p>
+                        <form className="flex gap-2 mb-6" onSubmit={(e) => e.preventDefault()}>
+                            <input
+                                type="email"
+                                placeholder="EMAIL"
+                                className="bg-white/10 border-0 rounded px-3 py-2 text-sm text-white focus:ring-1 focus:ring-neon-blue w-full"
+                            />
+                            <button className="bg-white text-black font-bold px-4 rounded hover:bg-neon-blue transition-colors">→</button>
+                        </form>
+
                         <div className="flex gap-4">
                             {['twitter', 'instagram', 'discord'].map((social) => (
                                 <motion.a

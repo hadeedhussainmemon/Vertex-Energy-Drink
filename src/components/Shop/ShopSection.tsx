@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { useStore } from "@/lib/store";
 
 interface Product {
@@ -85,11 +86,14 @@ export default function ShopSection() {
                                 <div className="h-80 bg-black/50 flex items-center justify-center relative overflow-hidden p-8">
                                     <div className="absolute inset-0 bg-radial-gradient from-neon-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     {/* Real Image */}
-                                    <img
-                                        src={p.image}
-                                        alt={p.name}
-                                        className="h-full w-auto object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
-                                    />
+                                    <div className="relative h-full w-full">
+                                        <Image
+                                            src={p.image}
+                                            alt={p.name}
+                                            fill
+                                            className="object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
+                                        />
+                                    </div>
                                 </div>
                                 <div className="p-6">
                                     <h3 className="text-2xl font-black text-white mb-1 uppercase italic">{p.name}</h3>
