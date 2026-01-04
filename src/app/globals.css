@@ -3,12 +3,12 @@
 @theme {
   --color-background: #0a0a0a;
   --color-foreground: #ededed;
-  
+
   /* Custom Neon Colors */
   --color-neon-blue: #00f0ff;
   --color-neon-green: #39ff14;
   --color-neon-red: #ff003c;
-  
+
   /* Fonts */
   --font-orbitron: Orbitron, sans-serif;
   --font-inter: Inter, sans-serif;
@@ -30,10 +30,58 @@ body {
   overflow-x: hidden;
 }
 
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-orbitron);
   letter-spacing: -0.05em;
   text-transform: uppercase;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #00f0ff;
+  /* Neon Blue on hover */
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #333 #050505;
+}
+
+/* Hide scrollbar for specific utility */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Brutalist Utility */
@@ -71,9 +119,20 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 @keyframes glitch {
-  2%, 64% { transform: translate(2px, 0) skew(0deg); }
-  4%, 60% { transform: translate(-2px, 0) skew(0deg); }
-  62% { transform: translate(0, 0) skew(5deg); }
+
+  2%,
+  64% {
+    transform: translate(2px, 0) skew(0deg);
+  }
+
+  4%,
+  60% {
+    transform: translate(-2px, 0) skew(0deg);
+  }
+
+  62% {
+    transform: translate(0, 0) skew(5deg);
+  }
 }
 
 .glitch-text:before,
@@ -89,9 +148,20 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 @keyframes glitchTop {
-  2%, 64% { transform: translate(2px, -2px); }
-  4%, 60% { transform: translate(-2px, 2px); }
-  62% { transform: translate(13px, -1px) skew(-13deg); }
+
+  2%,
+  64% {
+    transform: translate(2px, -2px);
+  }
+
+  4%,
+  60% {
+    transform: translate(-2px, 2px);
+  }
+
+  62% {
+    transform: translate(13px, -1px) skew(-13deg);
+  }
 }
 
 .glitch-text:after {
@@ -100,7 +170,18 @@ h1,h2,h3,h4,h5,h6 {
 }
 
 @keyframes glitchBotom {
-  2%, 64% { transform: translate(-2px, 0); }
-  4%, 60% { transform: translate(-2px, 0); }
-  62% { transform: translate(-22px, 5px) skew(21deg); }
+
+  2%,
+  64% {
+    transform: translate(-2px, 0);
+  }
+
+  4%,
+  60% {
+    transform: translate(-2px, 0);
+  }
+
+  62% {
+    transform: translate(-22px, 5px) skew(21deg);
+  }
 }
