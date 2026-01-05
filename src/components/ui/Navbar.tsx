@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
+import { ShoppingBag } from "lucide-react";
 
 import useSound from "@/hooks/useSound";
 
@@ -77,9 +78,15 @@ export default function Navbar() {
                 <button
                     onClick={handleCartClick}
                     onMouseEnter={playHover}
-                    className="relative group"
+                    className="relative p-2 hover:bg-white/10 rounded-full transition-all group"
+                    aria-label="View Cart"
                 >
-                    <span className="font-bold text-sm group-hover:text-neon-blue transition-colors">CART ({cartCount})</span>
+                    <ShoppingBag className="w-6 h-6 group-hover:text-neon-blue transition-colors" />
+                    {cartCount > 0 && (
+                        <span className="absolute -top-1 -right-1 bg-neon-blue text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(0,229,255,0.5)]">
+                            {cartCount}
+                        </span>
+                    )}
                 </button>
 
                 {/* Mobile Hamburger */}

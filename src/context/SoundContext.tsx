@@ -18,11 +18,17 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     const humGainRef = useRef<GainNode | null>(null);
 
     const initAudio = useCallback(() => {
+        // Only run on client
+        if (typeof window === 'undefined') return;
+
         if (!audioContextRef.current) {
             audioContextRef.current = new (window.AudioContext || (window as any).webkitAudioContext)();
         }
+
         if (audioContextRef.current.state === 'suspended') {
-            audioContextRef.current.resume();
+            audioContextRef.current.resume().catch(err => {
+                console.warn("VERTEX: AudioContext resume failed - waiting for interaction.", err);
+            });
         }
     }, []);
 

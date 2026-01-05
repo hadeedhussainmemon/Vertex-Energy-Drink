@@ -7,6 +7,9 @@ import { Mesh, Group } from "three";
 import { Float, useGLTF, Center, Resize } from "@react-three/drei";
 import { useStore } from "@/lib/store";
 
+// Use a reliable CDN for the Draco decoder to avoid local path issues
+const DRACO_URL = "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
+
 const metalMaterialProps = {
     color: "#cccccc",
     metalness: 1,
@@ -29,25 +32,35 @@ const getModelPath = (color: string) => {
     }
 };
 
+// Material cache to prevent memory leaks during flavor switching
+const materialCache: Record<string, THREE.MeshStandardMaterial> = {};
+
 export default function Can({ color }: CanProps) {
     const groupRef = useRef<Group>(null);
     const storeColor = useStore((state) => state.activeFlavorColor);
     const finalColor = color || storeColor;
     const modelPath = getModelPath(finalColor);
 
-    // Load the specific GLB model based on color/flavor
-    const { scene } = useGLTF(modelPath);
+    // Load the specific GLB model based on color/flavor with Draco compression
+    const { scene } = useGLTF(modelPath, DRACO_URL);
 
-    // Optimize: Memoize the clone and traversal so it doesn't happen on every react render
+    // Optimize: Use material pooling instead of cloning every render
     const clone = useMemo(() => {
         const c = scene.clone();
+
+        // Ensure we have a pooled material for this color
+        if (!materialCache[finalColor]) {
+            materialCache[finalColor] = new THREE.MeshStandardMaterial({
+                color: finalColor,
+                metalness: 0.6,
+                roughness: 0.2,
+                envMapIntensity: 1.2
+            });
+        }
+
         c.traverse((child: any) => {
             if (child.isMesh) {
-                child.material = child.material.clone();
-                child.material.color.set(finalColor);
-                child.material.metalness = 0.6;
-                child.material.roughness = 0.2;
-                child.material.envMapIntensity = 1.2;
+                child.material = materialCache[finalColor];
             }
         });
         return c;

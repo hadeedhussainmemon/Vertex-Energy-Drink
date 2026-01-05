@@ -5,9 +5,11 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
+const DRACO_URL = "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
+
 export default function FloatingCans({ count = 15 }) {
-    // Load the optimized model to get geometry/material
-    const { scene } = useGLTF("/models/cyber_citrus_compressed.glb");
+    // Load the optimized model to get geometry/material with Draco
+    const { scene } = useGLTF("/models/cyber_citrus_compressed.glb", DRACO_URL);
     const meshRef = useRef<THREE.InstancedMesh>(null);
     const dummyRef = useRef<THREE.Object3D>(null!);
 

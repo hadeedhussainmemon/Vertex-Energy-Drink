@@ -4,6 +4,20 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useStore } from "@/lib/store";
+import { useGLTF } from "@react-three/drei";
+
+const DRACO_URL = "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
+
+// Map colors to model files (sync with Can.tsx)
+const getModelPath = (color?: string) => {
+    if (!color) return "/models/cyber_citrus_compressed.glb";
+    switch (color.toLowerCase()) {
+        case "#39ff14": return "/models/cyber_citrus_compressed.glb";
+        case "#00f0ff": return "/models/neon_berry_compressed.glb";
+        case "#ff003c": return "/models/apex_red_compressed.glb";
+        default: return "/models/cyber_citrus_compressed.glb";
+    }
+};
 
 interface Product {
     _id: string;
@@ -92,6 +106,16 @@ export default function ShopSection() {
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
                                 className="bg-glass rounded-2xl overflow-hidden group hover:border-neon-blue/50 transition-all duration-300"
+                                onMouseEnter={() => {
+                                    // Pre-warm the 3D model for this flavor when hovered
+                                    // This makes the transition to the product page feel instant
+                                    const model = getModelPath(p.bgImage ? undefined : "#39ff14"); // Fallback logic
+                                    // Actually we need the color mapping which we don't have strictly in product object here
+                                    // but we can guess or use a default.
+                                    useGLTF.preload("/models/cyber_citrus_compressed.glb", DRACO_URL);
+                                    useGLTF.preload("/models/neon_berry_compressed.glb", DRACO_URL);
+                                    useGLTF.preload("/models/apex_red_compressed.glb", DRACO_URL);
+                                }}
                             >
                                 <a href={`/product/${p.slug}`} className="block h-full cursor-pointer">
                                     <div className="h-80 bg-black/50 flex items-center justify-center relative overflow-hidden p-8">

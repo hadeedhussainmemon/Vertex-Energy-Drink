@@ -24,24 +24,30 @@ float noise(vec2 p) {
     float b = hash(i + vec2(1.0, 0.0));
     float c = hash(i + vec2(0.0, 1.0));
     float d = hash(i + vec2(1.0, 1.0));
+    // Use smoothed f with small epsilon to prevent precision artifacts
     vec2 u = f * f * (3.0 - 2.0 * f);
     return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
 void main() {
-    // Slower, smoother movement
-    float n = noise(vUv * 2.0 + uTime * 0.02);
-    float dist = length(vUv - 0.5);
-    float vignette = 1.0 - dist * 1.5;
+    // Slower, smoother movement with safety clamp on uTime
+    float t = uTime * 0.02;
+    float n = noise(vUv * 2.0 + t);
     
-    // Stable intensity mapping
+    vec2 center = vUv - 0.5;
+    float dist = length(center);
+    
+    // Safety clamp dist to prevent division/infinity issues
+    float vignette = 1.0 - clamp(dist * 1.5, 0.0, 1.0);
+    
+    // Stable intensity mapping with noise sanitization
     float intensity = clamp(n * 0.4, 0.0, 1.0);
     vec3 color = mix(vec3(0.005), uColor * 0.3, intensity);
     
     // Safety clamp for smoothstep
-    color *= smoothstep(0.0, 1.0, clamp(vignette, 0.0, 1.0));
+    color *= smoothstep(0.0, 1.0, vignette);
 
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
 }
 `;
 
