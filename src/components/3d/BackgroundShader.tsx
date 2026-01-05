@@ -83,12 +83,14 @@ export default function BackgroundShader() {
     });
 
     return (
-        <mesh ref={meshRef} position={[0, 0, -10]} scale={[30, 30, 1]}>
+        <mesh ref={meshRef} position={[0, 0, -15]} scale={[40, 40, 1]}>
             <planeGeometry args={[1, 1]} />
             <shaderMaterial
                 fragmentShader={fragmentShader}
                 vertexShader={vertexShader}
                 uniforms={uniforms}
+                transparent
+                opacity={0.8}
             />
         </mesh>
     );

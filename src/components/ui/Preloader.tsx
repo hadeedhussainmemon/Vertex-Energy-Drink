@@ -32,7 +32,7 @@ export default function Preloader() {
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 1, ease: "easeInOut" }}
-                    className="fixed inset-0 z-[100] bg-black flex items-center justify-center overflow-hidden"
+                    className="fixed inset-0 z-[9999] bg-black flex items-center justify-center overflow-hidden"
                 >
                     {/* Background 3D Hologram */}
                     <div className="absolute inset-0 opacity-40">
@@ -45,7 +45,7 @@ export default function Preloader() {
 
                     {/* Tech Scanning UI */}
                     <div className="absolute inset-0 pointer-events-none border-[1px] border-white/5 m-4 sm:m-10" />
-                    <div className="absolute top-10 left-10 text-[10px] font-mono text-neon-blue/50 tracking-widest uppercase">
+                    <div className="absolute top-24 left-10 text-[10px] font-mono text-neon-blue/50 tracking-widest uppercase">
                         System.Initialize();<br />
                         Memory.Alloc(0x8F22);<br />
                         Vertex.Core.Load();

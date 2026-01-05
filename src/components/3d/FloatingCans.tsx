@@ -37,7 +37,7 @@ export default function FloatingCans({ count = 15 }) {
             position: new THREE.Vector3(
                 (Math.random() - 0.5) * 40, // Spread X
                 (Math.random() - 0.5) * 40, // Spread Y
-                (Math.random() - 0.5) * 10 - 5 // Spread Z (behind)
+                (Math.random() * 8) - 4 // Spread Z (-4 to +4)
             ),
             rotation: new THREE.Euler(
                 Math.random() * Math.PI,

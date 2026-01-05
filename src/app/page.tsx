@@ -19,7 +19,7 @@ const Can = dynamic(() => import("@/components/3d/Can"), { ssr: false });
 
 export default function Home() {
   return (
-    <main className="relative w-full min-h-screen bg-black overflow-x-hidden">
+    <main className="relative w-full min-h-screen overflow-x-hidden">
       {/* 3D Scene Layer - Loaded Dynamically */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <CanvasLayout>

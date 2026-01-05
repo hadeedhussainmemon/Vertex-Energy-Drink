@@ -44,6 +44,12 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
         osc.start();
         osc.stop(ctx.currentTime + 0.1);
+
+        // Disconnect after stop to prevent any dangling noise
+        setTimeout(() => {
+            osc.disconnect();
+            gain.disconnect();
+        }, 150);
     }, [initAudio]);
 
     const playClick = useCallback(() => {
@@ -64,6 +70,11 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
         osc.start();
         osc.stop(ctx.currentTime + 0.2);
+
+        setTimeout(() => {
+            osc.disconnect();
+            gain.disconnect();
+        }, 250);
     }, [initAudio]);
 
     const playWhoosh = useCallback(() => {
@@ -75,21 +86,27 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
         osc.type = 'sawtooth';
         osc.frequency.setValueAtTime(100, ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.5);
+        osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.4); // Less harsh high end
 
         filter.type = 'lowpass';
-        filter.frequency.setValueAtTime(200, ctx.currentTime);
-        filter.frequency.exponentialRampToValueAtTime(2000, ctx.currentTime + 0.3);
+        filter.frequency.setValueAtTime(400, ctx.currentTime); // Lower start
+        filter.frequency.exponentialRampToValueAtTime(3000, ctx.currentTime + 0.3);
 
-        gain.gain.setValueAtTime(0.05, ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+        gain.gain.setValueAtTime(0.03, ctx.currentTime); // Lower volume
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
 
         osc.connect(filter);
         filter.connect(gain);
         gain.connect(ctx.destination);
 
         osc.start();
-        osc.stop(ctx.currentTime + 0.5);
+        osc.stop(ctx.currentTime + 0.4);
+
+        setTimeout(() => {
+            osc.disconnect();
+            filter.disconnect();
+            gain.disconnect();
+        }, 500);
     }, [initAudio]);
 
     const startAmbientHum = useCallback(() => {
