@@ -4,7 +4,7 @@ export default function LegalPage() {
             <div className="max-w-3xl mx-auto prose prose-invert">
                 <h1 className="text-4xl font-black mb-8">LEGAL PROTOCOLS</h1>
 
-                <section className="mb-12">
+                <section id="privacy" className="mb-12 scroll-mt-32">
                     <h2 className="text-2xl font-bold text-neon-blue mb-4">PRIVACY POLICY</h2>
                     <p className="text-gray-400 mb-4">
                         VERTEX collects minimal data to process your energy acquisitions. We do not sell your neural patterns to third-party advertisers.
@@ -15,7 +15,7 @@ export default function LegalPage() {
                     </p>
                 </section>
 
-                <section className="mb-12">
+                <section id="terms" className="mb-12 scroll-mt-32">
                     <h2 className="text-2xl font-bold text-neon-red mb-4">TERMS OF SERVICE</h2>
                     <p className="text-gray-400 mb-4">
                         By consuming VERTEX, you agree to waive all liability for broken personal records,

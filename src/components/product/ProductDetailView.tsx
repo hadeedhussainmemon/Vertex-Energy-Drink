@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useStore } from "@/lib/store";
 import dynamic from "next/dynamic";
+import { toast } from "sonner";
 
 // Dynamic load for 3D to avoid SSR issues
 import { Canvas } from "@react-three/fiber";
@@ -32,6 +33,9 @@ export default function ProductDetailView({ product }: { product: Product }) {
             price: product.price,
             image: product.image,
             quantity: quantity
+        });
+        toast.success(`${product.name} ADDED TO ARSENAL`, {
+            description: "Check your cart to checkout.",
         });
     };
 

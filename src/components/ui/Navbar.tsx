@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useStore } from "@/lib/store";
@@ -8,6 +9,7 @@ import { useStore } from "@/lib/store";
 import useSound from "@/hooks/useSound";
 
 export default function Navbar() {
+    const pathname = usePathname();
     const cartCount = useStore((state) => state.cart.reduce((acc, item) => acc + item.quantity, 0));
     const toggleCart = useStore((state) => state.toggleCart);
     const { playHover, playClick } = useSound();
@@ -24,7 +26,7 @@ export default function Navbar() {
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed top-0 left-0 w-full z-50 px-6 py-6 flex justify-between items-center mix-blend-difference text-white"
+            className="fixed top-0 left-0 w-full z-[999] px-6 py-6 flex justify-between items-center mix-blend-difference text-white"
         >
             <Link
                 href="/"
@@ -38,9 +40,30 @@ export default function Navbar() {
             {/* Desktop Menu */}
             <div className="hidden md:flex gap-8 font-bold text-sm tracking-widest">
                 <Link href="/#shop" className="hover:text-neon-red transition-colors" onMouseEnter={playHover} onClick={playClick}>SHOP</Link>
-                <Link href="/about" className="hover:text-neon-blue transition-colors" onMouseEnter={playHover} onClick={playClick}>ABOUT</Link>
-                <Link href="/faq" className="hover:text-white transition-colors" onMouseEnter={playHover} onClick={playClick}>FAQ</Link>
-                <Link href="/contact" className="hover:text-neon-green transition-colors" onMouseEnter={playHover} onClick={playClick}>CONTACT</Link>
+                <Link
+                    href="/about"
+                    className={`transition-colors ${pathname === '/about' ? 'text-neon-blue drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]' : 'hover:text-neon-blue'}`}
+                    onMouseEnter={playHover}
+                    onClick={playClick}
+                >
+                    ABOUT
+                </Link>
+                <Link
+                    href="/faq"
+                    className={`transition-colors ${pathname === '/faq' ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'hover:text-white'}`}
+                    onMouseEnter={playHover}
+                    onClick={playClick}
+                >
+                    FAQ
+                </Link>
+                <Link
+                    href="/contact"
+                    className={`transition-colors ${pathname === '/contact' ? 'text-neon-green drop-shadow-[0_0_8px_rgba(57,255,20,0.8)]' : 'hover:text-neon-green'}`}
+                    onMouseEnter={playHover}
+                    onClick={playClick}
+                >
+                    CONTACT
+                </Link>
             </div>
 
             <div className="flex items-center gap-6 relative z-50">

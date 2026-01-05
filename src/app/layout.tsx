@@ -20,13 +20,13 @@ export const metadata: Metadata = {
   },
 
   icons: {
-    icon: '/favicon.png',
+    icon: '/favicon.ico',
   }
 };
 
 import CustomCursor from "@/components/ui/CustomCursor";
 import CartDrawer from "@/components/ui/CartDrawer";
-import MainLayout from "@/components/layout/MainLayout";
+import AppShell from "@/components/layout/AppShell";
 
 import NoiseOverlay from "@/components/ui/NoiseOverlay";
 import Preloader from "@/components/ui/Preloader";
@@ -48,11 +48,9 @@ export default function RootLayout({
           <NoiseOverlay />
           <CustomCursor />
           <CartDrawer />
-          <SmoothScroll>
-            <MainLayout>
-              {children}
-            </MainLayout>
-          </SmoothScroll>
+          <AppShell>
+            {children}
+          </AppShell>
         </SoundProvider>
       </body>
     </html>

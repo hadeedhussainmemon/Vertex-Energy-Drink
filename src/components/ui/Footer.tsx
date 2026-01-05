@@ -20,9 +20,10 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-white mb-6">EXPLORE</h4>
                         <ul className="space-y-2 text-gray-400 text-sm">
-                            <li><Link href="#flavors" className="hover:text-neon-blue transition-colors">Flavors</Link></li>
-                            <li><Link href="#ingredients" className="hover:text-neon-green transition-colors">Ingredients</Link></li>
-                            <li><Link href="#shop" className="hover:text-neon-red transition-colors">Shop</Link></li>
+                            <li><Link href="/#flavors" className="hover:text-neon-blue transition-colors">Flavors</Link></li>
+                            <li><Link href="/#ingredients" className="hover:text-neon-green transition-colors">Ingredients</Link></li>
+                            <li><Link href="/#shop" className="hover:text-neon-red transition-colors">Shop</Link></li>
+                            <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
                             <li><Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link></li>
                         </ul>
                     </div>
@@ -30,9 +31,9 @@ export default function Footer() {
                     <div>
                         <h4 className="font-bold text-white mb-6">LEGAL</h4>
                         <ul className="space-y-2 text-gray-400 text-sm">
-                            <li><Link href="/legal" className="hover:text-white transition-colors">Privacy Policy</Link></li>
-                            <li><Link href="/legal" className="hover:text-white transition-colors">Terms of Service</Link></li>
-                            <li><Link href="/legal" className="hover:text-white transition-colors">Shipping Policy</Link></li>
+                            <li><Link href="/legal#privacy" className="hover:text-white transition-colors">Privacy Policy</Link></li>
+                            <li><Link href="/legal#terms" className="hover:text-white transition-colors">Terms of Service</Link></li>
+                            <li><Link href="/contact" className="hover:text-white transition-colors">Support / Shipping</Link></li>
                         </ul>
                     </div>
 
