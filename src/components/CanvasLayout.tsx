@@ -29,7 +29,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     alpha: true,
                     powerPreference: "high-performance"
                 }}
-                dpr={isMobile ? 1 : dpr as any} // Force 1x DPR on mobile
+                dpr={isMobile ? 1 : [1, 1.5]} // Cap max DPR at 1.5 for performance
                 shadows={false} // GLOBAL SHADOW DISABLE for performance
             >
                 <Suspense fallback={null}>

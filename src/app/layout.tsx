@@ -16,11 +16,11 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     siteName: "VERTEX Energy",
+    images: '/opengraph-image.jpg',
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "VERTEX | Reach Your Peak",
-    description: "The next generation of hydration.",
+
+  icons: {
+    icon: '/favicon.png',
   }
 };
 

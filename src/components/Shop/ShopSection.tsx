@@ -11,6 +11,7 @@ interface Product {
     price: number;
     image: string;
     bgImage?: string;
+    slug: string;
     flavor: string;
 }
 
@@ -114,7 +115,7 @@ export default function ShopSection() {
                                         <span className="text-neon-blue font-mono text-xl font-bold">${p.price}</span>
                                         <div className="flex gap-2">
                                             <a
-                                                href={`/product/${p._id}`}
+                                                href={`/product/${p.slug}`}
                                                 className="bg-zinc-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-white hover:text-black transition-all text-sm flex items-center"
                                             >
                                                 VIEW
