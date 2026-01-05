@@ -10,9 +10,9 @@
   --color-neon-green: #2fff00;
   --color-neon-red: #ff1f5a;
 
-  /* Fonts */
-  --font-orbitron: Orbitron, sans-serif;
-  --font-inter: Inter, sans-serif;
+  /* Fonts - Pointing to Next.js variables */
+  --font-orbitron: var(--font-orbitron), system-ui, sans-serif;
+  --font-inter: var(--font-inter), system-ui, sans-serif;
 }
 
 /* Base Variable Updates for Components */
@@ -22,6 +22,8 @@
   --neon-blue: #00e5ff;
   --neon-green: #2fff00;
   --neon-red: #ff1f5a;
+  --font-orbitron: var(--font-orbitron);
+  --font-inter: var(--font-inter);
 }
 
 body {
