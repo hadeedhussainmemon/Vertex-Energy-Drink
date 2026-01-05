@@ -19,9 +19,6 @@ export const metadata: Metadata = {
     images: '/opengraph-image.jpg',
   },
 
-  icons: {
-    icon: '/favicon.ico',
-  }
 };
 
 import CustomCursor from "@/components/ui/CustomCursor";

@@ -14,24 +14,18 @@ export default function FloatingCans({ count = 15 }) {
     // Extract geometry and material from the loaded GLTF
     const { geometry, material } = useMemo(() => {
         let geo: THREE.BufferGeometry | undefined;
-        let mat: THREE.Material | THREE.Material[] | undefined;
+        // Use a safe, simple material for background instances to prevent shader crashes
+        // The original material might have high-res textures/complex settings causing TDR/Context Loss
+        const mat = new THREE.MeshStandardMaterial({
+            color: "#ffffff",
+            metalness: 0.8,
+            roughness: 0.2,
+            envMapIntensity: 1,
+        });
+
         scene.traverse((child) => {
             if ((child as THREE.Mesh).isMesh && !geo) {
                 geo = (child as THREE.Mesh).geometry;
-                const m = (child as THREE.Mesh).material;
-                // Clone material to ensure we can modify it safely and disable vertexColors
-                // to prevent "instanceColor" null errors in Three.js InstancedMesh
-                if (Array.isArray(m)) {
-                    mat = m.map(mtr => {
-                        const c = mtr.clone();
-                        c.vertexColors = false;
-                        return c;
-                    });
-                } else {
-                    const c = m.clone();
-                    c.vertexColors = false;
-                    mat = c;
-                }
             }
         });
         return { geometry: geo, material: mat };

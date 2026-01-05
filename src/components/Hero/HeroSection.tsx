@@ -19,7 +19,7 @@ export default function HeroSection() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1, delay: 0.5 }}
-                    className="text-mega italic text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] glitch-text mix-blend-difference"
+                    className="text-mega italic text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-purple-500 to-neon-red drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] glitch-text mix-blend-difference animate-clouds"
                     title="UNLEASH PURE ENERGY"
                 >
                     UNLEASH<br />PURE<br />ENERGY

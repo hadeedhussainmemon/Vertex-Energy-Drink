@@ -185,3 +185,23 @@ html {
     transform: translate(-22px, 5px) skew(21deg);
   }
 }
+
+/* Multi-color Cloud Text Effect */
+@keyframes clouds {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-clouds {
+  background-size: 300% 300%;
+  animation: clouds 8s ease infinite;
+}
