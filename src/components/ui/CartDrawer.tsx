@@ -70,18 +70,29 @@ export default function CartDrawer() {
                                         <span>${cart.reduce((acc, item) => acc + item.price * item.quantity, 0).toFixed(2)}</span>
                                     </div>
                                     <button
-                                        onClick={() => {
-                                            toggleCart();
-                                            // Use window.location or router manually if inside component, 
-                                            // but CartDrawer is inside layout/providers usually. 
-                                            // Let's use simple window.location for robust "Link" behavior or import useRouter.
-                                            // Since this is "use client", we can check auth.
-                                            // Let's just navigate to /placeorder which handles auth redirect.
-                                            window.location.href = '/placeorder';
+                                        onClick={async () => {
+                                            try {
+                                                const res = await fetch('/api/checkout', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ items: cart }),
+                                                });
+                                                const data = await res.json();
+
+                                                if (data.url) {
+                                                    window.location.href = data.url;
+                                                } else if (data.error) {
+                                                    // Use console or toast for error
+                                                    console.error(data.error);
+                                                    alert(data.error); // Fallback until toast is wired here
+                                                }
+                                            } catch (err) {
+                                                console.error(err);
+                                            }
                                         }}
                                         className="w-full bg-neon-blue text-black font-bold py-4 rounded hover:bg-white transition-colors"
                                     >
-                                        CHECKOUT
+                                        CHECKOUT (STRIPE)
                                     </button>
                                 </div>
                             </div>
