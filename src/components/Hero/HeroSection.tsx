@@ -35,26 +35,26 @@ export default function HeroSection() {
         <section ref={containerRef} className="h-screen w-full flex flex-col items-center justify-center relative z-10 pointer-events-none">
             <div className="text-center space-y-4 pointer-events-auto">
                 <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
+                    transition={{ duration: 0.5, delay: 0.1 }}
                     className="text-neon-blue uppercase tracking-widest text-sm font-bold"
                 >
                     Fuel Your Grind
                 </motion.h2>
                 <motion.h1
-                    initial={{ opacity: 0, scale: 0.8 }}
+                    initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 1, delay: 0.5 }}
+                    transition={{ duration: 0.7, delay: 0.2 }}
                     className="text-mega italic text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-white to-neon-red drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] glitch-text animate-clouds py-4"
                     title="UNLEASH PURE ENERGY"
                 >
                     UNLEASH<br />PURE<br />ENERGY
                 </motion.h1>
                 <motion.p
-                    initial={{ opacity: 0 }}
+                    initial={{ opacity: 0.1 }} // Start slightly visible to help LCP detection
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 0.8, delay: 1 }}
+                    transition={{ duration: 0.5, delay: 0.3 }}
                     className="text-gray-200 max-w-md mx-auto mt-4 drop-shadow-[0_0_5px_rgba(0,0,0,0.5)]"
                 >
                     The next generation of hydration. Zero sugar. Infinite power.

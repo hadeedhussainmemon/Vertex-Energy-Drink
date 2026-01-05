@@ -12,7 +12,7 @@ export default function Footer() {
                         <h3 className="text-2xl font-black text-white tracking-tighter">
                             VER<span className="text-neon-blue">TEX</span>
                         </h3>
-                        <p className="text-gray-400 text-sm">
+                        <p className="text-gray-300 text-sm">
                             The future of performance fuel. Designed for gamers, creators, and night owls. Reaching your peak has never tasted this good.
                         </p>
                     </div>
@@ -39,7 +39,7 @@ export default function Footer() {
 
                     <div>
                         <h4 className="font-bold text-white mb-6">STAY CHARGED</h4>
-                        <p className="text-xs text-gray-500 mb-4">Join the inner circle.</p>
+                        <p className="text-xs text-gray-400 mb-4">Join the inner circle.</p>
                         <form className="flex gap-2 mb-6" onSubmit={(e) => e.preventDefault()}>
                             <input
                                 type="email"
@@ -55,7 +55,7 @@ export default function Footer() {
                                     key={social}
                                     href={`#${social}`}
                                     whileHover={{ scale: 1.1, color: "#00f0ff" }}
-                                    className="w-10 h-10 rounded-full border border-white/20 flex items-center justify-center text-gray-400 hover:border-neon-blue transition-colors"
+                                    className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center text-gray-300 hover:border-neon-blue transition-colors"
                                 >
                                     <span className="sr-only">{social}</span>
                                     {/* Simple placeholder icons */}
@@ -66,7 +66,7 @@ export default function Footer() {
                     </div>
                 </div>
 
-                <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-600">
+                <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-400">
                     <p>© 2026 VERTEX Energy Inc. All rights reserved.</p>
                     <p>Built with Next.js & Three.js</p>
                 </div>

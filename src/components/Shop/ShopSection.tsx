@@ -72,8 +72,16 @@ export default function ShopSection() {
                 </h2>
 
                 {loading ? (
-                    <div className="text-center text-neon-blue animate-pulse">
-                        LOADING INVENTORY...
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                        {[1, 2, 3].map((i) => (
+                            <div key={i} className="h-[450px] bg-zinc-900/50 border border-white/5 rounded-2xl animate-pulse flex flex-col">
+                                <div className="h-80 bg-zinc-800/50 rounded-t-2xl" />
+                                <div className="p-6 space-y-4">
+                                    <div className="h-8 bg-zinc-800/50 w-3/4 rounded" />
+                                    <div className="h-4 bg-zinc-800/50 w-1/2 rounded" />
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
@@ -96,6 +104,7 @@ export default function ShopSection() {
                                                     alt=""
                                                     fill
                                                     className="object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-700"
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                 />
                                             </div>
                                         )}
@@ -105,13 +114,14 @@ export default function ShopSection() {
                                                 alt={p.name}
                                                 fill
                                                 className="object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
+                                                sizes="(max-width: 768px) 80vw, (max-width: 1200px) 40vw, 25vw"
                                             />
                                         </div>
                                     </div>
-                                    <div className="p-6 relative z-20 bg-zinc-900/80 backdrop-blur-sm h-full"> 
+                                    <div className="p-6 relative z-20 bg-zinc-900/80 backdrop-blur-sm h-full">
                                         <h3 className="text-2xl font-black text-white mb-1 uppercase italic group-hover:text-neon-blue transition-colors">{p.name}</h3>
                                         <p className="text-gray-400 text-sm mb-6">{p.flavor}</p>
-    
+
                                         <div className="flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
                                             <span className="text-neon-blue font-mono text-xl font-bold">${p.price}</span>
                                             <div onClick={(e) => {

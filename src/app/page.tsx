@@ -3,9 +3,11 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import HeroSection from "@/components/Hero/HeroSection";
-import FlavorSection from "@/components/Flavor/FlavorSection";
-import IngredientSection from "@/components/Ingredients/IngredientSection";
-import ShopSection from "@/components/Shop/ShopSection";
+// Defer sections that are below the fold
+const FlavorSection = dynamic(() => import("@/components/Flavor/FlavorSection"), { ssr: false });
+const IngredientSection = dynamic(() => import("@/components/Ingredients/IngredientSection"), { ssr: false });
+const ShopSection = dynamic(() => import("@/components/Shop/ShopSection"), { ssr: false });
+
 import CanSkeleton from "@/components/3d/CanSkeleton";
 
 // Lazy load the 3D Canvas to reduce Total Blocking Time (TBT)

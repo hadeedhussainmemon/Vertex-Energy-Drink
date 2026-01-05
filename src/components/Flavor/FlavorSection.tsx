@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useStore } from "@/lib/store";
+import Image from "next/image";
 
 const flavors = [
     {
@@ -52,15 +53,17 @@ export default function FlavorSection() {
                         <div
                             key={i}
                             onMouseEnter={() => setFlavorColor(f.hex)}
-                            className="h-[500px] flex flex-col items-center justify-between p-8 bg-glass rounded-3xl hover:border-white/30 transition-colors group cursor-pointer relative overflow-hidden"
+                            className="min-h-[500px] flex flex-col items-center justify-between p-8 bg-glass rounded-3xl hover:border-white/30 transition-colors group cursor-pointer relative overflow-hidden"
                         >
                             {/* Static Background Layer (User requested separation) */}
                             {f.bgImage && (
                                 <div className="absolute inset-0 z-0 overflow-hidden rounded-3xl">
-                                    <img
+                                    <Image
                                         src={f.bgImage}
                                         alt=""
-                                        className="w-full h-full object-cover opacity-20 grayscale brightness-150 transition-transform duration-700 group-hover:scale-105"
+                                        fill
+                                        className="object-cover opacity-20 grayscale brightness-150 transition-transform duration-700 group-hover:scale-105"
+                                        sizes="(max-width: 768px) 100vw, 33vw"
                                     />
                                 </div>
                             )}
@@ -74,10 +77,13 @@ export default function FlavorSection() {
                                 whileHover={{ scale: 1.1, rotate: 6 }}
                                 transition={{ type: "spring", stiffness: 300 }}
                             >
-                                <img
+                                <Image
                                     src={f.image}
                                     alt={f.name}
-                                    className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                                    fill
+                                    className="object-contain drop-shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+                                    sizes="(max-width: 768px) 80vw, 25vw"
+                                    priority={i === 0} // Prioritize first flavor image
                                 />
                             </motion.div>
 
