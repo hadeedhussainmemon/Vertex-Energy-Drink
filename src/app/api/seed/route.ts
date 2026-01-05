@@ -48,7 +48,8 @@ export async function GET() {
                 category: 'Energy',
                 user: adminUser._id,
                 countInStock: 100,
-                color: '#eaff00'
+                color: '#eaff00',
+                bgImage: '/images/cyber_citrus_bg.webp'
             },
             {
                 name: 'Neon Berry',
@@ -59,7 +60,8 @@ export async function GET() {
                 category: 'Energy',
                 user: adminUser._id,
                 countInStock: 100,
-                color: '#00f0ff'
+                color: '#00f0ff',
+                bgImage: '/images/neon_berry_bg.webp'
             },
             {
                 name: 'Apex Red',
@@ -70,7 +72,8 @@ export async function GET() {
                 category: 'Energy',
                 user: adminUser._id,
                 countInStock: 100,
-                color: '#ff003c'
+                color: '#ff003c',
+                bgImage: '/images/apex_red_bg.webp'
             }
         ];
 

@@ -10,6 +10,7 @@ interface Product {
     name: string;
     price: number;
     image: string;
+    bgImage?: string;
     flavor: string;
 }
 
@@ -86,7 +87,17 @@ export default function ShopSection() {
                                 <div className="h-80 bg-black/50 flex items-center justify-center relative overflow-hidden p-8">
                                     <div className="absolute inset-0 bg-radial-gradient from-neon-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                     {/* Real Image */}
-                                    <div className="relative h-full w-full">
+                                    {p.bgImage && (
+                                        <div className="absolute inset-0 z-0">
+                                            <Image
+                                                src={p.bgImage}
+                                                alt=""
+                                                fill
+                                                className="object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-700"
+                                            />
+                                        </div>
+                                    )}
+                                    <div className="relative z-10 h-full w-full">
                                         <Image
                                             src={p.image}
                                             alt={p.name}
@@ -95,7 +106,7 @@ export default function ShopSection() {
                                         />
                                     </div>
                                 </div>
-                                <div className="p-6">
+                                <div className="p-6 relative z-20 bg-zinc-900/80 backdrop-blur-sm">
                                     <h3 className="text-2xl font-black text-white mb-1 uppercase italic">{p.name}</h3>
                                     <p className="text-gray-400 text-sm mb-6">{p.flavor}</p>
 
