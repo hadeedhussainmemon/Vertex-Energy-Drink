@@ -42,10 +42,14 @@ export const useStore = create<AppState>()(
                     return {
                         cart: state.cart.map((i) =>
                             i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-                        )
+                        ),
+                        isCartOpen: true
                     };
                 }
-                return { cart: [...state.cart, { ...item, quantity: 1 }] };
+                return {
+                    cart: [...state.cart, { ...item, quantity: 1 }],
+                    isCartOpen: true
+                };
             }),
 
             removeFromCart: (id) => set((state) => ({

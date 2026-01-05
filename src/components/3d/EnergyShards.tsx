@@ -64,6 +64,7 @@ export default function EnergyShards({ count = 30 }) {
                 wireframe
                 transparent
                 opacity={0.3}
+                vertexColors={false}
             />
         </instancedMesh>
     );

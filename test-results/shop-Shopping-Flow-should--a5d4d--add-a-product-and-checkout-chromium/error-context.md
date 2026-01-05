@@ -1,0 +1,122 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic:
+    - generic:
+      - generic: "46"
+      - generic: "%"
+    - generic: VERTEX // SYSTEM_BOOT
+  - generic:
+    - img
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - heading "YOUR STASH" [level=2] [ref=e5]
+      - button "CLOSE" [ref=e6]
+    - generic [ref=e7]:
+      - generic [ref=e8]:
+        - generic [ref=e9]:
+          - heading "Cyber Citrus" [level=3] [ref=e10]
+          - paragraph [ref=e11]: "Qty: 1"
+        - generic [ref=e12]:
+          - generic [ref=e13]: $5.99
+          - button "REMOVE" [ref=e14]
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - generic [ref=e17]: TOTAL
+          - generic [ref=e18]: $5.99
+        - button "CHECKOUT" [ref=e19]
+  - navigation [ref=e20]:
+    - link "VERTEX" [ref=e21] [cursor=pointer]:
+      - /url: /
+    - generic [ref=e22]:
+      - link "SHOP" [ref=e23] [cursor=pointer]:
+        - /url: /#shop
+      - link "ABOUT" [ref=e24] [cursor=pointer]:
+        - /url: /about
+      - link "FAQ" [ref=e25] [cursor=pointer]:
+        - /url: /faq
+      - link "CONTACT" [ref=e26] [cursor=pointer]:
+        - /url: /contact
+    - generic [ref=e27]:
+      - link "LOGIN" [ref=e28] [cursor=pointer]:
+        - /url: /login
+      - button "CART (1)" [ref=e29]:
+        - generic [ref=e30]: CART (1)
+  - main [ref=e31]:
+    - generic [ref=e40]:
+      - generic [ref=e41]:
+        - heading "Cyber Citrus" [level=1] [ref=e42]
+        - paragraph [ref=e43]: Lemon Lime
+        - paragraph [ref=e44]: A surge of electric lemon-lime energy. The taste of the future.
+      - generic [ref=e45]:
+        - generic [ref=e46]: $5.99
+        - generic [ref=e47]:
+          - button "-" [ref=e48]
+          - generic [ref=e49]: "1"
+          - button "+" [ref=e50]
+      - button "ADD TO ARSENAL" [active] [ref=e52]
+      - generic [ref=e53]:
+        - generic [ref=e54]:
+          - paragraph [ref=e55]: Caffeine
+          - paragraph [ref=e56]: 200mg
+        - generic [ref=e57]:
+          - paragraph [ref=e58]: Sugar
+          - paragraph [ref=e59]: 0g
+        - generic [ref=e60]:
+          - paragraph [ref=e61]: Vitamins
+          - paragraph [ref=e62]: B6/B12
+  - contentinfo [ref=e63]:
+    - generic [ref=e64]:
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - heading "VERTEX" [level=3] [ref=e67]
+          - paragraph [ref=e68]: The future of performance fuel. Designed for gamers, creators, and night owls. Reaching your peak has never tasted this good.
+        - generic [ref=e69]:
+          - heading "EXPLORE" [level=4] [ref=e70]
+          - list [ref=e71]:
+            - listitem [ref=e72]:
+              - link "Flavors" [ref=e73] [cursor=pointer]:
+                - /url: "#flavors"
+            - listitem [ref=e74]:
+              - link "Ingredients" [ref=e75] [cursor=pointer]:
+                - /url: "#ingredients"
+            - listitem [ref=e76]:
+              - link "Shop" [ref=e77] [cursor=pointer]:
+                - /url: "#shop"
+            - listitem [ref=e78]:
+              - link "Dashboard" [ref=e79] [cursor=pointer]:
+                - /url: /dashboard
+        - generic [ref=e80]:
+          - heading "LEGAL" [level=4] [ref=e81]
+          - list [ref=e82]:
+            - listitem [ref=e83]:
+              - link "Privacy Policy" [ref=e84] [cursor=pointer]:
+                - /url: /legal
+            - listitem [ref=e85]:
+              - link "Terms of Service" [ref=e86] [cursor=pointer]:
+                - /url: /legal
+            - listitem [ref=e87]:
+              - link "Shipping Policy" [ref=e88] [cursor=pointer]:
+                - /url: /legal
+        - generic [ref=e89]:
+          - heading "STAY CHARGED" [level=4] [ref=e90]
+          - paragraph [ref=e91]: Join the inner circle.
+          - generic [ref=e92]:
+            - textbox "EMAIL" [ref=e93]
+            - button "→" [ref=e94]
+          - generic [ref=e95]:
+            - link "twitter" [ref=e96] [cursor=pointer]:
+              - /url: "#twitter"
+              - generic [ref=e97]: twitter
+            - link "instagram" [ref=e99] [cursor=pointer]:
+              - /url: "#instagram"
+              - generic [ref=e100]: instagram
+            - link "discord" [ref=e102] [cursor=pointer]:
+              - /url: "#discord"
+              - generic [ref=e103]: discord
+      - generic [ref=e105]:
+        - paragraph [ref=e106]: © 2026 VERTEX Energy Inc. All rights reserved.
+        - paragraph [ref=e107]: Built with Next.js & Three.js
+  - alert [ref=e108]
+```

@@ -85,50 +85,48 @@ export default function ShopSection() {
                                 viewport={{ once: true }}
                                 className="bg-zinc-900/50 border border-white/5 rounded-2xl overflow-hidden group hover:border-neon-blue/50 transition-all duration-300"
                             >
-                                <div className="h-80 bg-black/50 flex items-center justify-center relative overflow-hidden p-8">
-                                    <div className="absolute inset-0 bg-radial-gradient from-neon-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                    {/* Real Image */}
-                                    {p.bgImage && (
-                                        <div className="absolute inset-0 z-0">
+                                <a href={`/product/${p.slug}`} className="block h-full cursor-pointer">
+                                    <div className="h-80 bg-black/50 flex items-center justify-center relative overflow-hidden p-8">
+                                        <div className="absolute inset-0 bg-radial-gradient from-neon-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                        {/* Real Image */}
+                                        {p.bgImage && (
+                                            <div className="absolute inset-0 z-0">
+                                                <Image
+                                                    src={p.bgImage}
+                                                    alt=""
+                                                    fill
+                                                    className="object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-700"
+                                                />
+                                            </div>
+                                        )}
+                                        <div className="relative z-10 h-full w-full">
                                             <Image
-                                                src={p.bgImage}
-                                                alt=""
+                                                src={p.image}
+                                                alt={p.name}
                                                 fill
-                                                className="object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-700"
+                                                className="object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
                                             />
                                         </div>
-                                    )}
-                                    <div className="relative z-10 h-full w-full">
-                                        <Image
-                                            src={p.image}
-                                            alt={p.name}
-                                            fill
-                                            className="object-contain drop-shadow-[0_0_15px_rgba(0,0,0,0.8)] group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500"
-                                        />
                                     </div>
-                                </div>
-                                <div className="p-6 relative z-20 bg-zinc-900/80 backdrop-blur-sm">
-                                    <h3 className="text-2xl font-black text-white mb-1 uppercase italic">{p.name}</h3>
-                                    <p className="text-gray-400 text-sm mb-6">{p.flavor}</p>
-
-                                    <div className="flex justify-between items-center border-t border-white/10 pt-4">
-                                        <span className="text-neon-blue font-mono text-xl font-bold">${p.price}</span>
-                                        <div className="flex gap-2">
-                                            <a
-                                                href={`/product/${p.slug}`}
-                                                className="bg-zinc-800 text-white px-4 py-2 rounded-lg font-bold hover:bg-white hover:text-black transition-all text-sm flex items-center"
-                                            >
-                                                VIEW
-                                            </a>
-                                            <button
-                                                onClick={() => handleAdd(p)}
-                                                className="bg-white text-black px-4 py-2 rounded-lg font-black tracking-wide hover:bg-neon-blue hover:scale-105 transition-all text-sm"
-                                            >
-                                                ADD
-                                            </button>
+                                    <div className="p-6 relative z-20 bg-zinc-900/80 backdrop-blur-sm h-full"> 
+                                        <h3 className="text-2xl font-black text-white mb-1 uppercase italic group-hover:text-neon-blue transition-colors">{p.name}</h3>
+                                        <p className="text-gray-400 text-sm mb-6">{p.flavor}</p>
+    
+                                        <div className="flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
+                                            <span className="text-neon-blue font-mono text-xl font-bold">${p.price}</span>
+                                            <div onClick={(e) => {
+                                                e.preventDefault(); // Prevent navigation when clicking ADD
+                                                handleAdd(p);
+                                            }}>
+                                                <button
+                                                    className="bg-white text-black px-6 py-2 rounded-lg font-black tracking-wide hover:bg-neon-blue hover:scale-105 transition-all text-sm"
+                                                >
+                                                    ADD
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </a>
                             </motion.div>
                         ))}
                     </div>

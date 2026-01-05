@@ -18,7 +18,20 @@ export default function FloatingCans({ count = 15 }) {
         scene.traverse((child) => {
             if ((child as THREE.Mesh).isMesh && !geo) {
                 geo = (child as THREE.Mesh).geometry;
-                mat = (child as THREE.Mesh).material;
+                const m = (child as THREE.Mesh).material;
+                // Clone material to ensure we can modify it safely and disable vertexColors
+                // to prevent "instanceColor" null errors in Three.js InstancedMesh
+                if (Array.isArray(m)) {
+                    mat = m.map(mtr => {
+                        const c = mtr.clone();
+                        c.vertexColors = false;
+                        return c;
+                    });
+                } else {
+                    const c = m.clone();
+                    c.vertexColors = false;
+                    mat = c;
+                }
             }
         });
         return { geometry: geo, material: mat };

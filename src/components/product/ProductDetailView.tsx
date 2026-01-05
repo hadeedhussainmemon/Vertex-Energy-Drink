@@ -22,7 +22,7 @@ interface Product {
 }
 
 export default function ProductDetailView({ product }: { product: Product }) {
-    const { addToCart } = useStore();
+    const addToCart = useStore((state) => state.addToCart);
     const [quantity, setQuantity] = useState(1);
 
     const handleAddToCart = () => {

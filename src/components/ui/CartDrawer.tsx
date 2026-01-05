@@ -4,7 +4,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useStore } from "@/lib/store";
 
 export default function CartDrawer() {
-    const { isCartOpen, toggleCart, cart, removeFromCart } = useStore();
+    const isCartOpen = useStore((state) => state.isCartOpen);
+    const toggleCart = useStore((state) => state.toggleCart);
+    const cart = useStore((state) => state.cart);
+    const removeFromCart = useStore((state) => state.removeFromCart);
 
     return (
         <AnimatePresence>

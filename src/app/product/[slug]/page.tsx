@@ -5,15 +5,15 @@ import { notFound } from "next/navigation";
 
 export const dynamic = 'force-dynamic';
 
-export default async function ProductPage({ params }: { params: Promise<{ id: string }> }) {
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
     await dbConnect();
 
     // In Next.js 15/16 params can be a promise
-    const { id } = await params;
+    const { slug } = await params;
 
     let product = null;
     try {
-        const productDoc = await Product.findById(id).lean();
+        const productDoc = await Product.findOne({ slug }).lean();
         if (productDoc) {
             product = {
                 ...productDoc,
