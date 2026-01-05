@@ -6,7 +6,7 @@ import * as THREE from "three";
 
 export default function EnergyShards({ count = 30 }) {
     const meshRef = useRef<THREE.InstancedMesh>(null);
-    const dummy = new THREE.Object3D();
+    const dummyRef = useRef(new THREE.Object3D());
 
     // Generate random data for shards
     const shards = useMemo(() => {
@@ -38,18 +38,18 @@ export default function EnergyShards({ count = 30 }) {
             const rotateX = shard.time * 0.2;
             const rotateY = shard.time * 0.1;
 
-            dummy.position.copy(shard.position);
-            dummy.position.y += floatY;
+            dummyRef.current.position.copy(shard.position);
+            dummyRef.current.position.y += floatY;
 
-            dummy.rotation.set(
+            dummyRef.current.rotation.set(
                 shard.rotation.x + rotateX,
                 shard.rotation.y + rotateY,
                 shard.rotation.z
             );
 
-            dummy.scale.setScalar(shard.scale);
-            dummy.updateMatrix();
-            meshRef.current!.setMatrixAt(i, dummy.matrix);
+            dummyRef.current.scale.setScalar(shard.scale);
+            dummyRef.current.updateMatrix();
+            meshRef.current!.setMatrixAt(i, dummyRef.current.matrix);
         });
         meshRef.current.instanceMatrix.needsUpdate = true;
     });

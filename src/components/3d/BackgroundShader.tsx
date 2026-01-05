@@ -69,14 +69,16 @@ export default function BackgroundShader() {
         uColor: { value: new THREE.Color(activeFlavorColor) }
     }), []);
 
+    const targetColor = useRef(new THREE.Color(activeFlavorColor));
+
     useFrame((state, delta) => {
         if (meshRef.current) {
             const material = meshRef.current.material as THREE.ShaderMaterial;
             material.uniforms.uTime.value += delta;
 
             // Smoothly interpolate color
-            const targetColor = new THREE.Color(activeFlavorColor);
-            material.uniforms.uColor.value.lerp(targetColor, 0.05);
+            targetColor.current.set(activeFlavorColor);
+            material.uniforms.uColor.value.lerp(targetColor.current, 0.05);
         }
     });
 

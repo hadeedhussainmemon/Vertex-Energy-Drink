@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 import { Mesh, Group } from "three";
 import { Float, useGLTF, Center, Resize } from "@react-three/drei";
 import { useStore } from "@/lib/store";
@@ -37,28 +38,37 @@ export default function Can({ color }: CanProps) {
     // Load the specific GLB model based on color/flavor
     const { scene } = useGLTF(modelPath);
 
-    // Clone to allow independent material manipulation
-    const clone = scene.clone();
+    // Optimize: Memoize the clone and traversal so it doesn't happen on every react render
+    const clone = useMemo(() => {
+        const c = scene.clone();
+        c.traverse((child: any) => {
+            if (child.isMesh) {
+                child.material = child.material.clone();
+                child.material.color.set(finalColor);
+                child.material.metalness = 0.6;
+                child.material.roughness = 0.2;
+                child.material.envMapIntensity = 1.2;
+            }
+        });
+        return c;
+    }, [scene, finalColor]);
 
-    // Traverse and apply the color/material settings
-    clone.traverse((child: any) => {
-        if (child.isMesh) {
-            child.material = child.material.clone();
+    useFrame((state) => {
+        if (!groupRef.current) return;
 
-            // Only apply color if it's the main body, avoiding lids if possible.
-            // Since we don't know the exact mesh names, we enable full tint for now.
-            // If the user wants original textures, we would remove this line.
-            // child.material.color.set(finalColor);
-            child.material.color.set(finalColor);
+        // Target rotation based on mouse position
+        // X rotate based on Y mouse (up/down)
+        // Y rotate based on X mouse (left/right)
+        const targetX = -state.mouse.y * 0.5;
+        const targetY = state.mouse.x * 0.5;
 
-            child.material.metalness = 0.6;
-            child.material.roughness = 0.2;
-            child.material.envMapIntensity = 1.2;
-        }
+        // Smoothly interpolate current rotation to target
+        groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, 0.1);
+        groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.1);
     });
 
     return (
-        <Float speed={2} rotationIntensity={1} floatIntensity={1}>
+        <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
             <group ref={groupRef} dispose={null}>
                 {/* Resize ensures the model fits within a standard 1 unit box, then we scale it up */}
                 <Resize scale={3}>
@@ -66,12 +76,6 @@ export default function Can({ color }: CanProps) {
                         <primitive object={clone} />
                     </Center>
                 </Resize>
-                
-                {/* FALLBACK: Wireframe box to verify Canvas is working. If you see this but no can, it's a model issue. */}
-                {/* <mesh>
-                    <boxGeometry args={[2, 4, 2]} />
-                    <meshBasicMaterial color="red" wireframe />
-                </mesh> */}
             </group>
         </Float>
     );

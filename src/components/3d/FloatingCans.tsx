@@ -9,7 +9,7 @@ export default function FloatingCans({ count = 15 }) {
     // Load the optimized model to get geometry/material
     const { scene } = useGLTF("/models/cyber_citrus_compressed.glb");
     const meshRef = useRef<THREE.InstancedMesh>(null);
-    const dummy = new THREE.Object3D();
+    const dummyRef = useRef(new THREE.Object3D());
 
     // Extract geometry and material from the loaded GLTF
     const { geometry, material } = useMemo(() => {
@@ -61,11 +61,11 @@ export default function FloatingCans({ count = 15 }) {
             can.rotation.x += delta * 0.5;
             can.rotation.y += delta * 0.3;
 
-            dummy.position.copy(can.position);
-            dummy.rotation.set(can.rotation.x, can.rotation.y, can.rotation.z);
-            dummy.scale.setScalar(can.scale);
-            dummy.updateMatrix();
-            meshRef.current!.setMatrixAt(i, dummy.matrix);
+            dummyRef.current.position.copy(can.position);
+            dummyRef.current.rotation.set(can.rotation.x, can.rotation.y, can.rotation.z);
+            dummyRef.current.scale.setScalar(can.scale);
+            dummyRef.current.updateMatrix();
+            meshRef.current!.setMatrixAt(i, dummyRef.current.matrix);
         });
         meshRef.current.instanceMatrix.needsUpdate = true;
     });

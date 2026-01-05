@@ -5,12 +5,17 @@ import React, { createContext, useContext, useRef, useEffect, useCallback } from
 interface SoundContextType {
     playHover: () => void;
     playClick: () => void;
+    playWhoosh: () => void;
+    startAmbientHum: () => void;
+    stopAmbientHum: () => void;
 }
 
 const SoundContext = createContext<SoundContextType | null>(null);
 
 export function SoundProvider({ children }: { children: React.ReactNode }) {
     const audioContextRef = useRef<AudioContext | null>(null);
+    const humOscRef = useRef<OscillatorNode | null>(null);
+    const humGainRef = useRef<GainNode | null>(null);
 
     const initAudio = useCallback(() => {
         if (!audioContextRef.current) {
@@ -61,6 +66,83 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
         osc.stop(ctx.currentTime + 0.2);
     }, [initAudio]);
 
+    const playWhoosh = useCallback(() => {
+        initAudio();
+        const ctx = audioContextRef.current!;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const filter = ctx.createBiquadFilter();
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(100, ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(1200, ctx.currentTime + 0.5);
+
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(200, ctx.currentTime);
+        filter.frequency.exponentialRampToValueAtTime(2000, ctx.currentTime + 0.3);
+
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 0.5);
+    }, [initAudio]);
+
+    const startAmbientHum = useCallback(() => {
+        initAudio();
+        if (humOscRef.current) return;
+
+        const ctx = audioContextRef.current!;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        const lfo = ctx.createOscillator();
+        const lfoGain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(55, ctx.currentTime); // Low A
+
+        gain.gain.setValueAtTime(0, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0.03, ctx.currentTime + 2); // Slow fade in
+
+        // LFO for a "breathing" hum
+        lfo.type = 'sine';
+        lfo.frequency.setValueAtTime(0.5, ctx.currentTime);
+        lfoGain.gain.setValueAtTime(0.01, ctx.currentTime);
+
+        lfo.connect(lfoGain);
+        lfoGain.connect(gain.gain);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        lfo.start();
+
+        humOscRef.current = osc;
+        humGainRef.current = gain;
+    }, [initAudio]);
+
+    const stopAmbientHum = useCallback(() => {
+        if (!humOscRef.current || !humGainRef.current || !audioContextRef.current) return;
+
+        const ctx = audioContextRef.current;
+        const gain = humGainRef.current;
+        const osc = humOscRef.current;
+
+        gain.gain.cancelScheduledValues(ctx.currentTime);
+        gain.gain.setValueAtTime(gain.gain.value, ctx.currentTime);
+        gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 1);
+
+        setTimeout(() => {
+            osc.stop();
+            humOscRef.current = null;
+            humGainRef.current = null;
+        }, 1100);
+    }, []);
+
     // Cleanup on unmount
     useEffect(() => {
         return () => {
@@ -71,7 +153,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
     }, []);
 
     return (
-        <SoundContext.Provider value={{ playHover, playClick }}>
+        <SoundContext.Provider value={{ playHover, playClick, playWhoosh, startAmbientHum, stopAmbientHum }}>
             {children}
         </SoundContext.Provider>
     );

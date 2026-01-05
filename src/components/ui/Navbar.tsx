@@ -12,11 +12,15 @@ export default function Navbar() {
     const pathname = usePathname();
     const cartCount = useStore((state) => state.cart.reduce((acc, item) => acc + item.quantity, 0));
     const toggleCart = useStore((state) => state.toggleCart);
-    const { playHover, playClick } = useSound();
+    const { playHover, playClick, playWhoosh } = useSound();
 
     const handleCartClick = () => {
         playClick();
         toggleCart();
+    };
+
+    const handleLinkClick = () => {
+        playWhoosh();
     };
 
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -32,19 +36,19 @@ export default function Navbar() {
                 href="/"
                 className="text-2xl font-black tracking-tighter relative z-50"
                 onMouseEnter={playHover}
-                onClick={playClick}
+                onClick={handleLinkClick}
             >
                 VER<span className="text-neon-blue">TEX</span>
             </Link>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex gap-8 font-bold text-sm tracking-widest">
-                <Link href="/#shop" className="hover:text-neon-red transition-colors" onMouseEnter={playHover} onClick={playClick}>SHOP</Link>
+                <Link href="/#shop" className="hover:text-neon-red transition-colors" onMouseEnter={playHover} onClick={handleLinkClick}>SHOP</Link>
                 <Link
                     href="/about"
                     className={`transition-colors ${pathname === '/about' ? 'text-neon-blue drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]' : 'hover:text-neon-blue'}`}
                     onMouseEnter={playHover}
-                    onClick={playClick}
+                    onClick={handleLinkClick}
                 >
                     ABOUT
                 </Link>
@@ -52,7 +56,7 @@ export default function Navbar() {
                     href="/faq"
                     className={`transition-colors ${pathname === '/faq' ? 'text-white drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]' : 'hover:text-white'}`}
                     onMouseEnter={playHover}
-                    onClick={playClick}
+                    onClick={handleLinkClick}
                 >
                     FAQ
                 </Link>
@@ -60,14 +64,14 @@ export default function Navbar() {
                     href="/contact"
                     className={`transition-colors ${pathname === '/contact' ? 'text-neon-green drop-shadow-[0_0_8px_rgba(57,255,20,0.8)]' : 'hover:text-neon-green'}`}
                     onMouseEnter={playHover}
-                    onClick={playClick}
+                    onClick={handleLinkClick}
                 >
                     CONTACT
                 </Link>
             </div>
 
             <div className="flex items-center gap-6 relative z-50">
-                <Link href="/login" className="hidden md:block font-bold text-sm hover:text-neon-blue transition-colors" onMouseEnter={playHover} onClick={playClick}>
+                <Link href="/login" className="hidden md:block font-bold text-sm hover:text-neon-blue transition-colors" onMouseEnter={playHover} onClick={handleLinkClick}>
                     LOGIN
                 </Link>
                 <button
@@ -102,7 +106,10 @@ export default function Navbar() {
                             <Link
                                 key={item}
                                 href={item === 'SHOP' ? '/#shop' : `/${item.toLowerCase()}`}
-                                onClick={() => setIsMenuOpen(false)}
+                                onClick={() => {
+                                    setIsMenuOpen(false);
+                                    handleLinkClick();
+                                }}
                                 className="hover:text-neon-blue text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500"
                             >
                                 {item}
