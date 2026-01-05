@@ -1,35 +1,10 @@
 "use client";
 
-import { motion, useScroll, useVelocity, useTransform, useSpring } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import MagneticButton from "@/components/ui/MagneticButton";
 
 export default function HeroSection() {
     const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollY } = useScroll();
-    const scrollVelocity = useVelocity(scrollY);
-
-    // Smooth the velocity value
-    const smoothVelocity = useSpring(scrollVelocity, {
-        damping: 50,
-        stiffness: 400
-    });
-
-    // Map velocity to animation speed (8s base down to 0.5s for fast scroll)
-    const velocityFactor = useTransform(smoothVelocity, [0, 1000], [1, 5], {
-        clamp: false
-    });
-
-    useEffect(() => {
-        return velocityFactor.onChange((latest) => {
-            if (containerRef.current) {
-                // Set a CSS variable for the animation duration
-                // latest is a multiplier, higher means faster
-                const duration = Math.max(0.2, 8 / Math.abs(latest));
-                containerRef.current.style.setProperty('--cloud-duration', `${duration}s`);
-            }
-        });
-    }, [velocityFactor]);
 
     return (
         <section ref={containerRef} className="h-screen w-full flex flex-col items-center justify-center relative z-10 pointer-events-none">

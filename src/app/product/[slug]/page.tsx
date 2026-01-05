@@ -18,6 +18,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             product = {
                 ...productDoc,
                 _id: productDoc._id.toString(),
+                user: productDoc.user.toString(),
+                reviews: productDoc.reviews ? productDoc.reviews.map((r: any) => ({
+                    ...r,
+                    _id: r._id.toString(),
+                    user: r.user.toString(),
+                    createdAt: r.createdAt.toISOString()
+                })) : []
             };
         }
     } catch (error) {

@@ -6,11 +6,11 @@ import Navbar from "@/components/ui/Navbar";
 import Footer from "@/components/ui/Footer";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import { Toaster } from "@/components/ui/Toaster";
-import useSound from "@/hooks/useSound";
+import { useSoundContext } from "@/context/SoundContext";
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
-    const { startAmbientHum } = useSound();
+    const { startAmbientHum } = useSoundContext();
 
     // Hide Nav/Footer on Login, Signup, and Admin routes
     const isAuthOrAdmin = pathname === "/login" || pathname === "/signup" || pathname.startsWith("/admin");

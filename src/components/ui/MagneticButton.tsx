@@ -3,12 +3,12 @@
 import { motion } from "framer-motion";
 import { useRef, useState } from "react";
 
-import useSound from "@/hooks/useSound";
+import { useSoundContext } from "@/context/SoundContext";
 
 export default function MagneticButton({ children, className = "", onClick }: { children: React.ReactNode, className?: string, onClick?: () => void }) {
     const ref = useRef<HTMLButtonElement>(null);
     const [position, setPosition] = useState({ x: 0, y: 0 });
-    const { playHover, playClick } = useSound();
+    const { playHover, playClick } = useSoundContext();
 
     const handleMouse = (e: React.MouseEvent) => {
         if (position.x === 0 && position.y === 0) playHover(); // Play only on enter

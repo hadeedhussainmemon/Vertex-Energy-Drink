@@ -191,25 +191,7 @@ html {
   }
 }
 
-/* Multi-color Cloud Text Effect */
-@keyframes clouds {
-  0% {
-    background-position: 0% 50%;
-  }
 
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.animate-clouds {
-  background-size: 300% 300%;
-  animation: clouds var(--cloud-duration, 8s) ease infinite;
-}
 
 /* HIGH-PERFORMANCE VISUAL SPEED SYSTEM */
 .bg-speed-container {

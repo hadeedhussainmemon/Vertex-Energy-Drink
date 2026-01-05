@@ -13,6 +13,15 @@ import { Environment, OrbitControls } from "@react-three/drei";
 
 const Can = dynamic(() => import("@/components/3d/Can"), { ssr: false });
 
+interface Review {
+    _id: string;
+    name: string;
+    rating: number;
+    comment: string;
+    user: string;
+    createdAt: string;
+}
+
 interface Product {
     _id: string;
     name: string;
@@ -21,6 +30,9 @@ interface Product {
     image: string;
     flavor: string;
     color: string;
+    reviews: Review[];
+    rating: number;
+    numReviews: number;
 }
 
 export default function ProductDetailView({ product }: { product: Product }) {
@@ -169,8 +181,164 @@ export default function ProductDetailView({ product }: { product: Product }) {
                             <p className="text-xl font-black">600% DV</p>
                         </div>
                     </div>
+                    {/* Reviews Anchor */}
+                    <div id="reviews" className="mt-24 pt-24 border-t border-white/10">
+                        <div className="flex flex-col md:flex-row justify-between items-start gap-12">
+                            {/* Review Stats */}
+                            <div className="w-full md:w-1/3 space-y-6">
+                                <h2 className="text-4xl font-black italic tracking-tighter uppercase">Customer Feedback</h2>
+                                <div className="flex items-center gap-4">
+                                    <div className="text-6xl font-black text-neon-blue">{product.rating.toFixed(1)}</div>
+                                    <div>
+                                        <div className="flex text-neon-blue">
+                                            {[...Array(5)].map((_, i) => (
+                                                <span key={i} className={i < Math.round(product.rating) ? "opacity-100" : "opacity-30"}>★</span>
+                                            ))}
+                                        </div>
+                                        <p className="text-gray-400 text-sm uppercase tracking-widest font-bold">{product.numReviews} REVIEWS</p>
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    {[5, 4, 3, 2, 1].map((star) => {
+                                        const count = product.reviews.filter(r => r.rating === star).length;
+                                        const percent = product.numReviews > 0 ? (count / product.numReviews) * 100 : 0;
+                                        return (
+                                            <div key={star} className="flex items-center gap-4 text-sm font-bold">
+                                                <span className="w-4">{star}</span>
+                                                <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
+                                                    <motion.div
+                                                        initial={{ width: 0 }}
+                                                        whileInView={{ width: `${percent}%` }}
+                                                        className="h-full bg-neon-blue shadow-[0_0_10px_rgba(0,229,255,0.5)]"
+                                                    />
+                                                </div>
+                                                <span className="w-8 text-right opacity-50">{count}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Review List & Form */}
+                            <div className="w-full md:w-2/3 space-y-12">
+                                {/* Post Review Form */}
+                                <ReviewForm productId={product._id} onReviewAdded={() => window.location.reload()} />
+
+                                {/* Review Feed */}
+                                <div className="space-y-8">
+                                    {product.reviews.length === 0 ? (
+                                        <div className="bg-zinc-900/30 border border-white/5 p-8 rounded-2xl text-center">
+                                            <p className="text-gray-500 uppercase tracking-widest font-bold">No data in transmission. Be the first to leave a review.</p>
+                                        </div>
+                                    ) : (
+                                        product.reviews.map((review) => (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: 20 }}
+                                                whileInView={{ opacity: 1, y: 0 }}
+                                                key={review._id}
+                                                className="bg-zinc-900/30 border border-white/5 p-8 rounded-2xl space-y-4 hover:border-white/10 transition-colors"
+                                            >
+                                                <div className="flex justify-between items-start">
+                                                    <div>
+                                                        <p className="font-black italic uppercase text-lg tracking-tight">{review.name}</p>
+                                                        <div className="flex text-neon-blue text-xs mt-1">
+                                                            {[...Array(5)].map((_, i) => (
+                                                                <span key={i} className={i < review.rating ? "opacity-100" : "opacity-30"}>★</span>
+                                                            ))}
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-[10px] text-gray-500 font-mono">{new Date(review.createdAt).toLocaleDateString()}</p>
+                                                </div>
+                                                <p className="text-gray-300 leading-relaxed italic">"{review.comment}"</p>
+                                            </motion.div>
+                                        ))
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    );
+}
+
+function ReviewForm({ productId, onReviewAdded }: { productId: string, onReviewAdded: () => void }) {
+    const userInfo = useStore((state) => state.userInfo);
+    const [rating, setRating] = useState(5);
+    const [comment, setComment] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!userInfo) {
+            toast.error("UNAUTHORIZED ACCESS", { description: "You must be logged in to leave a review." });
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const res = await fetch(`/api/products/${productId}/reviews`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${userInfo.token}`
+                },
+                body: JSON.stringify({ rating, comment }),
+            });
+
+            if (res.ok) {
+                toast.success("TRANSMISSION SUCCESSFUL", { description: "Your review has been added to the network." });
+                setComment("");
+                onReviewAdded();
+            } else {
+                const error = await res.json();
+                toast.error("DUPLICATE ENTRY DETECTED", { description: error.message });
+            }
+        } catch (err) {
+            toast.error("TRANSMISSION FAILED", { description: "Please check your network link." });
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (!userInfo) return null;
+
+    return (
+        <form onSubmit={handleSubmit} className="bg-glass p-8 rounded-2xl border border-neon-blue/20 space-y-6">
+            <h3 className="text-xl font-black uppercase italic tracking-tighter">Submit Your Stats</h3>
+            <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Performance Rating</label>
+                <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                            key={star}
+                            type="button"
+                            onClick={() => setRating(star)}
+                            className={`text-2xl transition-all ${star <= rating ? "text-neon-blue drop-shadow-[0_0_8px_rgba(0,229,255,0.6)]" : "text-white/10"}`}
+                        >
+                            ★
+                        </button>
+                    ))}
+                </div>
+            </div>
+            <div className="space-y-2">
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Feedback Message</label>
+                <textarea
+                    required
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    className="w-full bg-black/50 border border-white/10 rounded-xl p-4 text-white focus:border-neon-blue transition-colors outline-none min-h-[120px]"
+                    placeholder="Describe the energy boost..."
+                />
+            </div>
+            <button
+                disabled={loading}
+                type="submit"
+                className="w-full bg-neon-blue text-black font-black py-4 rounded-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:scale-100"
+            >
+                {loading ? "TRANSMITTING..." : "POST REVIEW"}
+            </button>
+        </form>
     );
 }

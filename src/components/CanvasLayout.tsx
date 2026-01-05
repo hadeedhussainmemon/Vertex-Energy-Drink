@@ -21,7 +21,7 @@ interface CanvasLayoutProps {
 }
 
 export default function CanvasLayout({ children, className = "fixed inset-0 z-0 pointer-events-none" }: CanvasLayoutProps) {
-    const { isMobile, dpr } = usePerformance();
+    const { isMobile } = usePerformance();
     const [performanceFactor, setPerformanceFactor] = useState(1);
     const [isVisible, setIsVisible] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);

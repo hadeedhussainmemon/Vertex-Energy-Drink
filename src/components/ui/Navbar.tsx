@@ -7,13 +7,13 @@ import { useState } from "react";
 import { useStore } from "@/lib/store";
 import { ShoppingBag } from "lucide-react";
 
-import useSound from "@/hooks/useSound";
+import { useSoundContext } from "@/context/SoundContext";
 
 export default function Navbar() {
     const pathname = usePathname();
     const cartCount = useStore((state) => state.cart.reduce((acc, item) => acc + item.quantity, 0));
     const toggleCart = useStore((state) => state.toggleCart);
-    const { playHover, playClick, playWhoosh } = useSound();
+    const { playHover, playClick, playWhoosh } = useSoundContext();
 
     const handleCartClick = () => {
         playClick();

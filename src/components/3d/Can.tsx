@@ -3,7 +3,7 @@
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
-import { Mesh, Group } from "three";
+import { Group } from "three";
 import { Float, useGLTF, Center, Resize } from "@react-three/drei";
 import { useStore } from "@/lib/store";
 
@@ -14,12 +14,7 @@ const MESHOPT_URL = "https://unpkg.com/meshoptimizer@0.21.0/meshopt_decoder.js";
 // KTX2 support for GPU-compressed textures
 const KTX2_URL = "https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/basis/";
 
-const metalMaterialProps = {
-    color: "#cccccc",
-    metalness: 1,
-    roughness: 0.1,
-    envMapIntensity: 1.5
-};
+
 
 interface CanProps {
     color?: string;
