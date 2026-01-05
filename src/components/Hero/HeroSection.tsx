@@ -46,7 +46,7 @@ export default function HeroSection() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 1, delay: 0.5 }}
-                    className="text-mega italic text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-purple-500 to-neon-red drop-shadow-[0_0_15px_rgba(255,255,255,0.3)] glitch-text mix-blend-difference animate-clouds"
+                    className="text-mega italic text-transparent bg-clip-text bg-gradient-to-r from-neon-blue via-white to-neon-red drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] glitch-text animate-clouds py-4"
                     title="UNLEASH PURE ENERGY"
                 >
                     UNLEASH<br />PURE<br />ENERGY
@@ -55,7 +55,7 @@ export default function HeroSection() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.8, delay: 1 }}
-                    className="text-gray-400 max-w-md mx-auto mt-4"
+                    className="text-gray-200 max-w-md mx-auto mt-4 drop-shadow-[0_0_5px_rgba(0,0,0,0.5)]"
                 >
                     The next generation of hydration. Zero sugar. Infinite power.
                 </motion.p>

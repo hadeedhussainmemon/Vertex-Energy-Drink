@@ -80,11 +80,11 @@ export default function ProductDetailView({ product }: { product: Product }) {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2 }}
                     >
-                        <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500">
+                        <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                             {product.name}
                         </h1>
-                        <p className="text-2xl text-neon-blue font-mono mb-6">{product.flavor}</p>
-                        <p className="text-gray-300 text-lg leading-relaxed max-w-xl">
+                        <p className="text-2xl text-neon-blue font-mono mb-6 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">{product.flavor}</p>
+                        <p className="text-gray-200 text-lg leading-relaxed max-w-xl">
                             {product.description}
                         </p>
                     </motion.div>
@@ -137,16 +137,16 @@ export default function ProductDetailView({ product }: { product: Product }) {
                         className="grid grid-cols-2 gap-6 pt-8 border-t border-white/10"
                     >
                         <div className="space-y-2">
-                            <h3 className="text-neon-blue font-bold text-sm tracking-widest uppercase">Performance</h3>
-                            <ul className="text-gray-400 text-sm space-y-1">
+                            <h3 className="text-neon-blue font-bold text-sm tracking-widest uppercase mb-2">Performance</h3>
+                            <ul className="text-gray-200 text-sm space-y-1">
                                 <li>• Sustained Focus</li>
                                 <li>• Zero Sugar Crash</li>
                                 <li>• Electrolyte Balanced</li>
                             </ul>
                         </div>
                         <div className="space-y-2">
-                            <h3 className="text-neon-red font-bold text-sm tracking-widest uppercase">Ingredients</h3>
-                            <ul className="text-gray-400 text-sm space-y-1">
+                            <h3 className="text-neon-red font-bold text-sm tracking-widest uppercase mb-2">Ingredients</h3>
+                            <ul className="text-gray-200 text-sm space-y-1">
                                 <li>• Natural Caffeine</li>
                                 <li>• B6 & B12 Complex</li>
                                 <li>• Bio-available Taurine</li>
@@ -157,15 +157,15 @@ export default function ProductDetailView({ product }: { product: Product }) {
                     {/* Nutritional Details */}
                     <div className="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 grid grid-cols-3 gap-4 text-center">
                         <div>
-                            <p className="text-gray-500 text-[10px] uppercase mb-1 tracking-tighter">Energy</p>
+                            <p className="text-gray-300 text-[10px] uppercase mb-1 tracking-tighter font-bold">Energy</p>
                             <p className="text-xl font-black">15 CAL</p>
                         </div>
                         <div>
-                            <p className="text-gray-500 text-[10px] uppercase mb-1 tracking-tighter">Caffeine</p>
+                            <p className="text-gray-300 text-[10px] uppercase mb-1 tracking-tighter font-bold">Caffeine</p>
                             <p className="text-xl font-black">180MG</p>
                         </div>
                         <div>
-                            <p className="text-gray-500 text-[10px] uppercase mb-1 tracking-tighter">Vitamins</p>
+                            <p className="text-gray-300 text-[10px] uppercase mb-1 tracking-tighter font-bold">Vitamins</p>
                             <p className="text-xl font-black">600% DV</p>
                         </div>
                     </div>

@@ -9,9 +9,9 @@ export default function CyberGrid() {
 
     const gridParams = useMemo(() => ({
         size: 100,
-        divisions: 100,
-        colorCenterLine: new THREE.Color(activeColor).multiplyScalar(2),
-        colorGrid: new THREE.Color(activeColor).multiplyScalar(0.2)
+        divisions: 50, // 50x50 is plenty for background
+        colorCenterLine: new THREE.Color(activeColor).multiplyScalar(1.5),
+        colorGrid: new THREE.Color(activeColor).multiplyScalar(0.1)
     }), [activeColor]);
 
     return (

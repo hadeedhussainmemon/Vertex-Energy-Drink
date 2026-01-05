@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #0a0a0a;
-  --color-foreground: #ededed;
+  --color-background: #050505;
+  --color-foreground: #ffffff;
 
   /* Custom Neon Colors */
   --color-neon-blue: #00f0ff;
@@ -16,8 +16,8 @@
 
 /* Base Variable Updates for Components */
 :root {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  --background: #050505;
+  --foreground: #ffffff;
   --neon-blue: #00f0ff;
   --neon-green: #39ff14;
   --neon-red: #ff003c;
@@ -28,6 +28,9 @@ body {
   background: var(--background);
   font-family: var(--font-inter);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 h1,
@@ -107,9 +110,9 @@ html {
 }
 
 @utility bg-glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
 }
 
 /* Glitch Effect */

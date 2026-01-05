@@ -30,11 +30,11 @@ export default function Navbar() {
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed top-0 left-0 w-full z-[999] px-6 py-6 flex justify-between items-center mix-blend-difference text-white"
+            className="fixed top-0 left-0 w-full z-[999] px-6 py-6 flex justify-between items-center text-white"
         >
             <Link
                 href="/"
-                className="text-2xl font-black tracking-tighter relative z-50"
+                className="text-2xl font-black tracking-tighter relative z-50 drop-shadow-[0_0_10px_rgba(0,0,0,0.5)]"
                 onMouseEnter={playHover}
                 onClick={handleLinkClick}
             >
@@ -42,7 +42,7 @@ export default function Navbar() {
             </Link>
 
             {/* Desktop Menu */}
-            <div className="hidden md:flex gap-8 font-bold text-sm tracking-widest">
+            <div className="hidden md:flex gap-8 font-bold text-sm tracking-widest drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]">
                 <Link href="/#shop" className="hover:text-neon-red transition-colors" onMouseEnter={playHover} onClick={handleLinkClick}>SHOP</Link>
                 <Link
                     href="/about"
@@ -110,7 +110,7 @@ export default function Navbar() {
                                     setIsMenuOpen(false);
                                     handleLinkClick();
                                 }}
-                                className="hover:text-neon-blue text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-500"
+                                className="hover:text-neon-blue text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-gray-300"
                             >
                                 {item}
                             </Link>

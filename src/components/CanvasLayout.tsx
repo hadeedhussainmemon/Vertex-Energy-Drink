@@ -27,56 +27,54 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
             <Canvas
                 camera={{ position: [0, 0, 5], fov: 45 }}
                 gl={{
-                    antialias: !isMobile, // Disable antialiasing on mobile for speed
+                    antialias: !isMobile,
                     alpha: true,
-                    powerPreference: "high-performance"
+                    powerPreference: "high-performance",
+                    failIfMajorPerformanceCaveat: true,
+                    preserveDrawingBuffer: false
                 }}
-                dpr={isMobile ? 1 : [1, 1.5]} // Cap max DPR at 1.5 for performance
-                shadows={false} // GLOBAL SHADOW DISABLE for performance
+                onCreated={({ gl }) => {
+                    gl.domElement.addEventListener("webglcontextlost", (e) => {
+                        e.preventDefault();
+                        console.warn("VERTEX: WebGL Context Lost. Re-initializing...");
+                    }, false);
+                }}
+                dpr={isMobile ? 1 : [1, 1.2]} // Extra cap for stability
+                shadows={false}
             >
                 <Suspense fallback={null}>
-                    {/* Lighting - Simplified on Mobile */}
-                    <ambientLight intensity={isMobile ? 0.8 : 0.5} />
-                    <spotLight
-                        position={[10, 10, 10]}
-                        angle={0.15}
-                        penumbra={1}
-                        intensity={1}
-                        castShadow={false}
-                    />
+                    <ambientLight intensity={isMobile ? 0.8 : 0.6} />
+                    <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
                     <pointLight position={[-10, -10, -10]} intensity={1} />
 
                     {children}
 
-                    <Environment preset="city" />
+                    {/* Use local city preset if available, or simpler lighting to avoid githack latency/crashes */}
+                    <Environment preset="apartment" />
 
-                    {/* Post Processing - Desktop Only */}
                     {!isMobile && (
                         <EffectComposer enableNormalPass={false} multisampling={0}>
-                            <Bloom luminanceThreshold={0} luminanceSmoothing={0.9} height={300} intensity={1.5} />
+                            <Bloom luminanceThreshold={1} luminanceSmoothing={0.9} height={300} intensity={1} />
                             <ScrollingAberration />
                         </EffectComposer>
                     )}
 
-                    {/* Particles - Reduced count on mobile */}
                     <Sparkles
-                        count={isMobile ? 50 : 500}
+                        count={isMobile ? 20 : 150} // Significantly reduced to avoid buffer overhead
                         scale={[20, 20, 10]}
-                        size={isMobile ? 6 : 4}
-                        speed={0.4}
-                        opacity={0.5}
-                        noise={0.2}
+                        size={isMobile ? 4 : 2}
+                        speed={0.3}
+                        opacity={0.3}
                         color="#ffffff"
                     />
 
-                    <FloatingParticles />
+                    <FloatingParticles count={isMobile ? 8 : 20} />
 
-                    {/* Heavy Geometry - Desktop Only */}
-                    {!isMobile && <EnergyShards />}
+                    {!isMobile && <EnergyShards count={20} />}
                     {!isMobile && <CyberRings />}
                     {!isMobile && <CyberGrid />}
 
-                    <FloatingCans count={isMobile ? 10 : 30} />
+                    <FloatingCans count={isMobile ? 5 : 20} />
 
                     <BackgroundShader />
                     <Preload all />
