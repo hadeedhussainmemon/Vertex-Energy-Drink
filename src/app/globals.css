@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 @theme {
-  --color-background: #050505;
-  --color-foreground: #ffffff;
+  --color-background: #02040a;
+  /* Deep Space */
+  --color-foreground: #f0f0f0;
 
-  /* Custom Neon Colors */
-  --color-neon-blue: #00f0ff;
-  --color-neon-green: #39ff14;
-  --color-neon-red: #ff003c;
+  /* Premium Neon Shades (HSL tuned) */
+  --color-neon-blue: #00e5ff;
+  --color-neon-green: #2fff00;
+  --color-neon-red: #ff1f5a;
 
   /* Fonts */
   --font-orbitron: Orbitron, sans-serif;
@@ -16,11 +17,11 @@
 
 /* Base Variable Updates for Components */
 :root {
-  --background: #050505;
-  --foreground: #ffffff;
-  --neon-blue: #00f0ff;
-  --neon-green: #39ff14;
-  --neon-red: #ff003c;
+  --background: #02040a;
+  --foreground: #f0f0f0;
+  --neon-blue: #00e5ff;
+  --neon-green: #2fff00;
+  --neon-red: #ff1f5a;
 }
 
 body {
@@ -57,7 +58,7 @@ h6 {
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #02040a;
 }
 
 ::-webkit-scrollbar-thumb {
@@ -74,7 +75,7 @@ h6 {
 /* Firefox */
 html {
   scrollbar-width: thin;
-  scrollbar-color: #333 #050505;
+  scrollbar-color: #333 #02040a;
 }
 
 /* Hide scrollbar for specific utility */
@@ -110,9 +111,10 @@ html {
 }
 
 @utility bg-glass {
-  background: rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* Glitch Effect */

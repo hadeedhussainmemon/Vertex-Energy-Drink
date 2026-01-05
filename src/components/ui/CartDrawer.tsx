@@ -24,41 +24,41 @@ export default function CartDrawer() {
                         initial={{ x: "100%" }}
                         animate={{ x: 0 }}
                         exit={{ x: "100%" }}
-                        transition={{ type: "spring", damping: 20 }}
-                        className="fixed right-0 top-0 h-full w-full max-w-md bg-zinc-900 border-l border-white/10 z-[70] p-6 shadow-2xl"
+                        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                        className="fixed right-0 top-0 h-full w-full max-w-md bg-[#02040a]/80 backdrop-blur-xl border-l border-white/10 z-[70] p-6 shadow-[[-10px_0_30px_rgba(0,0,0,0.5)]]"
                     >
                         <div className="flex justify-between items-center mb-8">
                             <h2 className="text-2xl font-black text-white">YOUR STASH</h2>
                             <button
                                 onClick={toggleCart}
-                                className="text-gray-400 hover:text-white"
+                                className="text-gray-300 hover:text-neon-blue transition-colors font-bold tracking-widest text-xs"
                             >
-                                CLOSE
+                                [ CLOSE ]
                             </button>
                         </div>
 
                         {cart.length === 0 ? (
-                            <div className="text-center text-gray-500 mt-20">
-                                <p>Your cart is empty.</p>
-                                <button onClick={toggleCart} className="mt-4 text-neon-blue underline">
-                                    Start Shopping
+                            <div className="text-center text-gray-400 mt-20 space-y-4">
+                                <p className="text-lg">Your stash is depleted.</p>
+                                <button onClick={toggleCart} className="bg-white/5 border border-white/10 px-6 py-3 rounded-full text-neon-blue font-bold hover:bg-white/10 transition-all">
+                                    REPLENISH NOW
                                 </button>
                             </div>
                         ) : (
                             <div className="space-y-4">
                                 {cart.map((item) => (
-                                    <div key={item.id} className="flex justify-between items-center bg-black/30 p-4 rounded-lg">
+                                    <div key={item.id} className="flex justify-between items-center bg-white/5 p-4 rounded-xl border border-white/5">
                                         <div>
-                                            <h3 className="font-bold text-white">{item.name}</h3>
-                                            <p className="text-sm text-gray-400">Qty: {item.quantity}</p>
+                                            <h3 className="font-bold text-white text-lg">{item.name}</h3>
+                                            <p className="text-sm text-gray-300">QUANTITY: {item.quantity}</p>
                                         </div>
                                         <div className="flex items-center gap-4">
                                             <span className="text-neon-blue font-mono">${(item.price * item.quantity).toFixed(2)}</span>
                                             <button
                                                 onClick={() => removeFromCart(item.id)}
-                                                className="text-red-500 hover:text-red-400 text-sm"
+                                                className="text-red-400 hover:text-red-300 text-xs font-bold tracking-tighter"
                                             >
-                                                REMOVE
+                                                [ REMOVE ]
                                             </button>
                                         </div>
                                     </div>

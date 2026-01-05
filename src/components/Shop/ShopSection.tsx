@@ -91,7 +91,7 @@ export default function ShopSection() {
                                 initial={{ opacity: 0, y: 20 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 viewport={{ once: true }}
-                                className="bg-zinc-900/50 border border-white/5 rounded-2xl overflow-hidden group hover:border-neon-blue/50 transition-all duration-300"
+                                className="bg-glass rounded-2xl overflow-hidden group hover:border-neon-blue/50 transition-all duration-300"
                             >
                                 <a href={`/product/${p.slug}`} className="block h-full cursor-pointer">
                                     <div className="h-80 bg-black/50 flex items-center justify-center relative overflow-hidden p-8">
@@ -118,9 +118,9 @@ export default function ShopSection() {
                                             />
                                         </div>
                                     </div>
-                                    <div className="p-6 relative z-20 bg-zinc-900/80 backdrop-blur-sm h-full">
-                                        <h3 className="text-2xl font-black text-white mb-1 uppercase italic group-hover:text-neon-blue transition-colors">{p.name}</h3>
-                                        <p className="text-gray-400 text-sm mb-6">{p.flavor}</p>
+                                    <div className="p-6 relative z-20 h-full">
+                                        <h3 className="text-2xl font-black text-white mb-1 uppercase italic group-hover:text-neon-blue transition-colors drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]">{p.name}</h3>
+                                        <p className="text-gray-300 text-sm mb-6 font-bold tracking-tight">{p.flavor}</p>
 
                                         <div className="flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
                                             <span className="text-neon-blue font-mono text-xl font-bold">${p.price}</span>

@@ -84,7 +84,7 @@ export default function ProductDetailView({ product }: { product: Product }) {
                             {product.name}
                         </h1>
                         <p className="text-2xl text-neon-blue font-mono mb-6 drop-shadow-[0_0_10px_rgba(0,240,255,0.4)]">{product.flavor}</p>
-                        <p className="text-gray-200 text-lg leading-relaxed max-w-xl">
+                        <p className="text-white/90 text-lg leading-relaxed max-w-xl drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]">
                             {product.description}
                         </p>
                     </motion.div>
@@ -99,7 +99,7 @@ export default function ProductDetailView({ product }: { product: Product }) {
                             ${product.price}
                         </div>
 
-                        <div className="flex items-center bg-zinc-900 border border-white/10 rounded-full px-6 py-2">
+                        <div className="flex items-center bg-zinc-900/50 border border-white/10 rounded-full px-6 py-2 bg-glass">
                             <button
                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
                                 className="text-2xl text-gray-400 hover:text-white transition-colors w-8"

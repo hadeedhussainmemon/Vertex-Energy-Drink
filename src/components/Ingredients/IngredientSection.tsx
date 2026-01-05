@@ -47,11 +47,11 @@ export default function IngredientSection() {
                             initial={{ opacity: 0, y: 50 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             transition={{ delay: i * 0.2 }}
-                            className="p-8 border border-white/10 rounded-2xl bg-black/40 backdrop-blur-md hover:bg-white/5 transition-all text-center group"
+                            className="p-8 bg-glass transition-all text-center group rounded-3xl"
                         >
                             <h3 className="text-5xl font-black text-neon-green mb-2 group-hover:scale-110 transition-transform duration-300">{ing.amount}</h3>
                             <h4 className="text-2xl font-bold text-white mb-2">{ing.name}</h4>
-                            <p className="text-gray-400">{ing.desc}</p>
+                            <p className="text-gray-300 font-medium">{ing.desc}</p>
                         </motion.div>
                     ))}
                 </div>

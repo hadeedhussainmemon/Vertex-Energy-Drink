@@ -55,7 +55,7 @@ export default function HeroSection() {
                     initial={{ opacity: 0.1 }} // Start slightly visible to help LCP detection
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.3 }}
-                    className="text-gray-200 max-w-md mx-auto mt-4 drop-shadow-[0_0_5px_rgba(0,0,0,0.5)]"
+                    className="text-white/90 max-w-md mx-auto mt-4 drop-shadow-[0_0_10px_rgba(0,0,0,0.8)] font-medium leading-relaxed"
                 >
                     The next generation of hydration. Zero sugar. Infinite power.
                 </motion.p>
@@ -66,10 +66,10 @@ export default function HeroSection() {
                     transition={{ duration: 0.8, delay: 1.2 }}
                     className="flex gap-4 justify-center mt-8"
                 >
-                    <MagneticButton className="bg-neon-blue text-black font-bold py-4 px-10 rounded-full border border-neon-blue">
+                    <MagneticButton className="bg-neon-blue text-black font-bold py-4 px-10 rounded-full border border-neon-blue shadow-[0_0_20px_rgba(0,229,255,0.4)] hover:shadow-[0_0_30px_rgba(0,229,255,0.6)] transition-shadow">
                         BUY NOW
                     </MagneticButton>
-                    <MagneticButton className="border border-white text-white font-bold py-4 px-10 rounded-full">
+                    <MagneticButton className="bg-white/5 border border-white/20 text-white font-bold py-4 px-10 rounded-full hover:bg-white/10 transition-all">
                         EXPLORE
                     </MagneticButton>
                 </motion.div>

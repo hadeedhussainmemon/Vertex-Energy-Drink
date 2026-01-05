@@ -30,7 +30,7 @@ export default function Navbar() {
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed top-0 left-0 w-full z-[999] px-6 py-6 flex justify-between items-center text-white"
+            className="fixed top-0 left-0 w-full z-[999] px-6 py-6 flex justify-between items-center text-white bg-gradient-to-b from-[#02040a]/40 to-transparent backdrop-blur-md border-b border-white/5"
         >
             <Link
                 href="/"
@@ -110,7 +110,7 @@ export default function Navbar() {
                                     setIsMenuOpen(false);
                                     handleLinkClick();
                                 }}
-                                className="hover:text-neon-blue text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-gray-300"
+                                className="hover:text-neon-blue text-transparent bg-clip-text bg-gradient-to-r from-white via-white to-gray-100 drop-shadow-[0_0_10px_rgba(255,255,255,0.3)]"
                             >
                                 {item}
                             </Link>
