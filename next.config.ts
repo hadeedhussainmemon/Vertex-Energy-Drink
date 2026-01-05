@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
-
 import { withSentryConfig } from "@sentry/nextjs";
+import withPWAInit from "next-pwa";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
@@ -12,26 +11,51 @@ const nextConfig: NextConfig = {
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
   },
   experimental: {
-    optimizePackageImports: ['@react-three/drei', '@react-three/fiber', 'lucide-react', 'framer-motion'],
+    optimizePackageImports: [
+      '@react-three/drei',
+      '@react-three/fiber',
+      'lucide-react',
+      'framer-motion'
+    ],
   },
 };
 
-export default withSentryConfig(nextConfig, {
-  // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
-
-  // Suppresses all logs
-  silent: true,
-
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-  // Upload a larger set of source maps for prettier stack traces (increases build time)
-  widenClientFileUpload: true,
-
-  // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-  tunnelRoute: "/monitoring",
-
-  // Automatically tree-shake Sentry logger statements to reduce bundle size
-  // disableLogger: true, // Deprecated, removing to fix build
+const withPWA = withPWAInit({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  skipWaiting: true,
+  runtimeCaching: [
+    {
+      urlPattern: /.*\.(?:glb|gltf|bin|draco)/i,
+      handler: 'CacheFirst',
+      options: {
+        cacheName: 'vertex-3d-assets',
+        expiration: {
+          maxEntries: 50,
+          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
+        },
+      },
+    },
+    {
+      urlPattern: /.*\.(?:png|jpg|jpeg|svg|gif|webp)/i,
+      handler: 'StaleWhileRevalidate',
+      options: {
+        cacheName: 'vertex-image-assets',
+        expiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 7 * 24 * 60 * 60, // 7 days
+        },
+      },
+    },
+  ],
 });
+
+// Sentry should be the outermost wrapper for best error tracking
+const sentryOptions = {
+  silent: true,
+  widenClientFileUpload: true,
+  tunnelRoute: "/monitoring",
+};
+
+export default withSentryConfig(withPWA(nextConfig), sentryOptions);

@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { useStore } from "@/lib/store";
 
 const fragmentShader = `
+precision highp float;
 uniform float uTime;
 uniform vec3 uColor;
 varying vec2 vUv;
@@ -31,7 +32,8 @@ float noise(vec2 p) {
 
 void main() {
     // Slower, smoother movement with safety clamp on uTime
-    float t = uTime * 0.02;
+    // Use mod to keep time within highp float safe range (prevent X4122)
+    float t = mod(uTime * 0.02, 1000.0);
     float n = noise(vUv * 2.0 + t);
     
     vec2 center = vUv - 0.5;

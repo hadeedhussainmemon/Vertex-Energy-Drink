@@ -117,7 +117,7 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
     const startAmbientHum = useCallback(() => {
         initAudio();
-        if (humOscRef.current) return;
+        if (humOscRef.current || !audioContextRef.current) return;
 
         const ctx = audioContextRef.current!;
         const osc = ctx.createOscillator();
@@ -146,6 +146,32 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
         humOscRef.current = osc;
         humGainRef.current = gain;
+    }, [initAudio]);
+
+    // Global listener to unlock audio on first interaction
+    useEffect(() => {
+        const handleFirstInteraction = () => {
+            initAudio();
+            // Optional: Start ambient hum on first move if desired
+            // startAmbientHum(); 
+
+            window.removeEventListener('click', handleFirstInteraction);
+            window.removeEventListener('scroll', handleFirstInteraction);
+            window.removeEventListener('touchstart', handleFirstInteraction);
+            window.removeEventListener('keydown', handleFirstInteraction);
+        };
+
+        window.addEventListener('click', handleFirstInteraction);
+        window.addEventListener('scroll', handleFirstInteraction);
+        window.addEventListener('touchstart', handleFirstInteraction);
+        window.addEventListener('keydown', handleFirstInteraction);
+
+        return () => {
+            window.removeEventListener('click', handleFirstInteraction);
+            window.removeEventListener('scroll', handleFirstInteraction);
+            window.removeEventListener('touchstart', handleFirstInteraction);
+            window.removeEventListener('keydown', handleFirstInteraction);
+        };
     }, [initAudio]);
 
     const stopAmbientHum = useCallback(() => {

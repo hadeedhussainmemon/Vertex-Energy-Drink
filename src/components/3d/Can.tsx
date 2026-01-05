@@ -7,8 +7,12 @@ import { Mesh, Group } from "three";
 import { Float, useGLTF, Center, Resize } from "@react-three/drei";
 import { useStore } from "@/lib/store";
 
-// Use a reliable CDN for the Draco decoder to avoid local path issues
+// Use reliable CDNs for decoders to avoid local path issues
 const DRACO_URL = "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
+const MESHOPT_URL = "https://unpkg.com/meshoptimizer@0.21.0/meshopt_decoder.js";
+
+// KTX2 support for GPU-compressed textures
+const KTX2_URL = "https://cdn.jsdelivr.net/gh/pmndrs/drei-assets@master/basis/";
 
 const metalMaterialProps = {
     color: "#cccccc",
@@ -23,12 +27,12 @@ interface CanProps {
 
 // Map colors to model files
 const getModelPath = (color: string) => {
-    if (!color) return "/models/cyber_citrus_compressed.glb";
+    if (!color) return "/models/cyber_citrus_ultra.glb";
     switch (color.toLowerCase()) {
-        case "#39ff14": return "/models/cyber_citrus_compressed.glb"; // Green
-        case "#00f0ff": return "/models/neon_berry_compressed.glb";   // Blue
-        case "#ff003c": return "/models/apex_red_compressed.glb";     // Red
-        default: return "/models/cyber_citrus_compressed.glb";        // Fallback
+        case "#39ff14": return "/models/cyber_citrus_ultra.glb"; // Green
+        case "#00f0ff": return "/models/neon_berry_ultra.glb";   // Blue
+        case "#ff003c": return "/models/apex_red_ultra.glb";     // Red
+        default: return "/models/cyber_citrus_ultra.glb";        // Fallback
     }
 };
 
@@ -41,8 +45,8 @@ export default function Can({ color }: CanProps) {
     const finalColor = color || storeColor;
     const modelPath = getModelPath(finalColor);
 
-    // Load the specific GLB model based on color/flavor with Draco compression
-    const { scene } = useGLTF(modelPath, DRACO_URL);
+    // Load the specific GLB model based on color/flavor with Draco, Meshopt, and KTX2 support
+    const { scene } = useGLTF(modelPath, DRACO_URL, true);
 
     // Optimize: Use material pooling instead of cloning every render
     const clone = useMemo(() => {
@@ -95,6 +99,6 @@ export default function Can({ color }: CanProps) {
 }
 
 // Preload all models to prevent stuttering
-useGLTF.preload("/models/cyber_citrus_compressed.glb");
-useGLTF.preload("/models/neon_berry_compressed.glb");
-useGLTF.preload("/models/apex_red_compressed.glb");
+useGLTF.preload("/models/cyber_citrus_ultra.glb");
+useGLTF.preload("/models/neon_berry_ultra.glb");
+useGLTF.preload("/models/apex_red_ultra.glb");

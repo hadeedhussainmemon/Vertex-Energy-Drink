@@ -39,9 +39,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${orbitron.variable}`}>
       <head>
-        {/* Faster preconnect to critical asset domains */}
-        <link rel="preconnect" href="https://www.gstatic.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Letting Next.js handle font optimization automatically */}
       </head>
       <body className="antialiased font-sans selection:bg-neon-blue selection:text-black">
         <SoundProvider>

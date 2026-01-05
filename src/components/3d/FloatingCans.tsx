@@ -6,10 +6,11 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 const DRACO_URL = "https://www.gstatic.com/draco/versioned/decoders/1.5.5/";
+const MESHOPT_URL = "https://unpkg.com/meshoptimizer@0.21.0/meshopt_decoder.js";
 
 export default function FloatingCans({ count = 15 }) {
-    // Load the optimized model to get geometry/material with Draco
-    const { scene } = useGLTF("/models/cyber_citrus_compressed.glb", DRACO_URL);
+    // Load the optimized model to get geometry/material with Draco and Meshopt
+    const { scene } = useGLTF("/models/cyber_citrus_ultra.glb", DRACO_URL, true);
     const meshRef = useRef<THREE.InstancedMesh>(null);
     const dummyRef = useRef<THREE.Object3D>(null!);
 
