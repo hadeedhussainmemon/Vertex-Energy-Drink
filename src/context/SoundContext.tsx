@@ -27,7 +27,9 @@ export function SoundProvider({ children }: { children: React.ReactNode }) {
 
         if (audioContextRef.current.state === 'suspended') {
             audioContextRef.current.resume().catch(err => {
-                console.warn("VERTEX: AudioContext resume failed - waiting for interaction.", err);
+                // Sanitize error logging to prevent "Cyclic object value" issues
+                const errorMsg = err instanceof Error ? err.message : String(err);
+                console.warn(`VERTEX Audio: Resume deferred until user interaction (${errorMsg})`);
             });
         }
     }, []);

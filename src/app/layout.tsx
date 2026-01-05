@@ -3,8 +3,8 @@ import { Inter, Orbitron } from "next/font/google"; // Import Orbitron for headi
 import "./globals.css";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron" });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: 'swap' });
+const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", display: 'swap' });
 
 export const metadata: Metadata = {
   title: "VERTEX | Reach Your Peak",

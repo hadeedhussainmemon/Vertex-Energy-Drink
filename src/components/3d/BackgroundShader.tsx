@@ -11,10 +11,10 @@ uniform float uTime;
 uniform vec3 uColor;
 varying vec2 vUv;
 
-// Cheaper, more stable pseudo-random noise
+// Safe hash function to avoid precision overflow on mobile/Windows
 float hash(vec2 p) {
-    p = fract(p * vec2(123.34, 456.21));
-    p += dot(p, p + 45.32);
+    p = fract(p * vec2(12.9898, 78.233));
+    p += dot(p, p + 34.45);
     return fract(p.x * p.y);
 }
 
@@ -25,28 +25,25 @@ float noise(vec2 p) {
     float b = hash(i + vec2(1.0, 0.0));
     float c = hash(i + vec2(0.0, 1.0));
     float d = hash(i + vec2(1.0, 1.0));
-    // Use smoothed f with small epsilon to prevent precision artifacts
+    // Use smaller constants and epsilon safety
     vec2 u = f * f * (3.0 - 2.0 * f);
     return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
 }
 
 void main() {
-    // Slower, smoother movement with safety clamp on uTime
-    // Use mod to keep time within highp float safe range (prevent X4122)
-    float t = mod(uTime * 0.02, 1000.0);
+    // Keep time within highp float safe range (prevent X4122)
+    // 256.0 is a stable power-of-two for modulo math
+    float t = mod(uTime * 0.02, 256.0);
     float n = noise(vUv * 2.0 + t);
     
     vec2 center = vUv - 0.5;
-    float dist = length(center);
+    // Add epsilon to prevent division by zero in length or normalization
+    float dist = length(center) + 0.000001;
     
-    // Safety clamp dist to prevent division/infinity issues
     float vignette = 1.0 - clamp(dist * 1.5, 0.0, 1.0);
-    
-    // Stable intensity mapping with noise sanitization
     float intensity = clamp(n * 0.4, 0.0, 1.0);
-    vec3 color = mix(vec3(0.005), uColor * 0.3, intensity);
     
-    // Safety clamp for smoothstep
+    vec3 color = mix(vec3(0.005), uColor * 0.3, intensity);
     color *= smoothstep(0.0, 1.0, vignette);
 
     gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);

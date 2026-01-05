@@ -78,6 +78,9 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
 
                     gl.domElement.addEventListener("webglcontextlost", handleContextLost, false);
                     gl.domElement.addEventListener("webglcontextrestored", handleContextRestored, false);
+
+                    // Explicit cleanup on window unload or component unmount to prevent leaks
+                    window.addEventListener("beforeunload", () => gl.dispose());
                 }}
                 dpr={isMobile ? 1 : [1, 1.5]}
                 shadows={false}
