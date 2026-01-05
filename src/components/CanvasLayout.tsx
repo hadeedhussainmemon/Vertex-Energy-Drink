@@ -7,8 +7,10 @@ import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import FloatingParticles from "./3d/FloatingParticles";
 import BackgroundShader from "./3d/BackgroundShader";
 import EnergyShards from "./3d/EnergyShards";
-import ScrollAberration from "./3d/ScrollAberration";
+import ScrollingAberration from "./3d/ScrollAberration";
 import CyberRings from "./3d/CyberRings";
+import FloatingCans from "./3d/FloatingCans";
+import CyberGrid from "./3d/CyberGrid";
 
 import usePerformance from "@/hooks/usePerformance";
 
@@ -72,6 +74,9 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     {/* Heavy Geometry - Desktop Only */}
                     {!isMobile && <EnergyShards />}
                     {!isMobile && <CyberRings />}
+                    {!isMobile && <CyberGrid />}
+
+                    <FloatingCans count={isMobile ? 10 : 30} />
 
                     <BackgroundShader />
                     <Preload all />
