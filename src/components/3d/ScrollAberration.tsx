@@ -23,25 +23,26 @@ export default function ScrollAberration() {
     useFrame((state, delta) => {
         if (!effectRef.current || !effectRef.current.offset) return;
 
-        // Calculate velocity: diff between current and last scroll
-        // Damping/Smoothing: Lerp the "target" velocity
         const currentScroll = scrollRef.current;
         const velocity = Math.abs(currentScroll - lastScrollRef.current);
 
+        // Sanitize velocity to avoid extreme values
+        const sanitizedVelocity = isNaN(velocity) ? 0 : velocity;
+
         // Normalize velocity to a reasonable offset range (0 to 0.05)
-        // We divide by a factor to dampen it.
-        const targetOffset = Math.min(velocity * 0.002, 0.05);
+        const targetOffset = Math.min(sanitizedVelocity * 0.002, 0.05);
 
         // Smoothly interpolate current offset to target
-        // We handle cases where offset might be an array or Vector2
         const currentX = effectRef.current.offset.x || 0;
-        const newOffset = THREE.MathUtils.lerp(currentX, targetOffset, 0.1);
+        let newOffset = THREE.MathUtils.lerp(currentX, targetOffset, 0.1);
+
+        // Final sanity check
+        if (isNaN(newOffset) || !isFinite(newOffset)) newOffset = 0;
 
         // Safely set offset
         if (effectRef.current.offset.set) {
             effectRef.current.offset.set(newOffset, newOffset);
         } else {
-            // Fallback for array or simplistic object
             effectRef.current.offset.x = newOffset;
             effectRef.current.offset.y = newOffset;
         }

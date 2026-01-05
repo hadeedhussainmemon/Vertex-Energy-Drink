@@ -7,6 +7,10 @@ import * as THREE from "three";
 
 export default function FloatingParticles({ count = 20 }) {
     const meshRef = useRef<THREE.InstancedMesh>(null);
+    const dummyRef = useRef(new THREE.Object3D());
+    const colorRef = useRef(new THREE.Color());
+    const targetColorRef = useRef(new THREE.Color());
+
     const activeFlavorColor = useStore((state) => state.activeFlavorColor);
 
     // Create random positions and speeds
@@ -24,44 +28,55 @@ export default function FloatingParticles({ count = 20 }) {
         return temp;
     }, [count]);
 
-    const dummy = new THREE.Object3D();
-
     useFrame((state) => {
         if (!meshRef.current) return;
 
         // Update color slowly to match flavor
-        const targetColor = new THREE.Color(activeFlavorColor);
-        const currentColor = new THREE.Color();
-        meshRef.current.getColorAt(0, currentColor);
-        currentColor.lerp(targetColor, 0.05);
+        targetColorRef.current.set(activeFlavorColor);
+
+        // We initialize colors if not present
+        if (!meshRef.current.instanceColor) {
+            const colorArray = new Float32Array(count * 3);
+            for (let i = 0; i < count; i++) {
+                targetColorRef.current.toArray(colorArray, i * 3);
+            }
+            meshRef.current.instanceColor = new THREE.InstancedBufferAttribute(colorArray, 3);
+        }
 
         particles.forEach((particle, i) => {
-            let { t, factor, speed, xFactor, yFactor, zFactor } = particle;
-            t = particle.t += speed / 2;
+            let { factor, speed, xFactor, yFactor, zFactor } = particle;
+            const t = particle.t += speed / 2;
             const a = Math.cos(t) + Math.sin(t * 1) / 10;
             const b = Math.sin(t) + Math.cos(t * 2) / 10;
             const s = Math.cos(t);
 
-            dummy.position.set(
-                (particle.mx / 10) * a + xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
-                (particle.my / 10) * b + yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
-                (particle.my / 10) * b + zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
+            dummyRef.current.position.set(
+                xFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 1) * factor) / 10,
+                yFactor + Math.sin((t / 10) * factor) + (Math.cos(t * 2) * factor) / 10,
+                zFactor + Math.cos((t / 10) * factor) + (Math.sin(t * 3) * factor) / 10
             );
-            dummy.scale.set(s, s, s);
-            dummy.rotation.set(s * 5, s * 5, s * 5);
-            dummy.updateMatrix();
+            dummyRef.current.scale.setScalar(Math.abs(s) * 0.5 + 0.1);
+            dummyRef.current.rotation.set(s * 5, s * 5, s * 5);
+            dummyRef.current.updateMatrix();
 
-            meshRef.current!.setMatrixAt(i, dummy.matrix);
-            meshRef.current!.setColorAt(i, currentColor);
+            meshRef.current!.setMatrixAt(i, dummyRef.current.matrix);
+
+            // Lerner color per instance roughly
+            meshRef.current!.getColorAt(i, colorRef.current);
+            colorRef.current.lerp(targetColorRef.current, 0.05);
+            meshRef.current!.setColorAt(i, colorRef.current);
         });
+
         meshRef.current.instanceMatrix.needsUpdate = true;
-        meshRef.current.instanceColor!.needsUpdate = true;
+        if (meshRef.current.instanceColor) {
+            meshRef.current.instanceColor.needsUpdate = true;
+        }
     });
 
     return (
         <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
             <dodecahedronGeometry args={[0.2, 0]} />
-            <meshStandardMaterial roughness={0.5} metalness={0.5} />
+            <meshStandardMaterial roughness={0.5} metalness={0.5} vertexColors />
         </instancedMesh>
     );
 }

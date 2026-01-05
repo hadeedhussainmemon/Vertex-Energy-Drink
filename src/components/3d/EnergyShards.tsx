@@ -55,7 +55,7 @@ export default function EnergyShards({ count = 30 }) {
     });
 
     return (
-        <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+        <instancedMesh ref={meshRef} args={[null as any, null as any, count]}>
             <tetrahedronGeometry args={[1, 0]} />
             <meshStandardMaterial
                 color="#00f0ff"
@@ -64,7 +64,6 @@ export default function EnergyShards({ count = 30 }) {
                 wireframe
                 transparent
                 opacity={0.3}
-                vertexColors={false}
             />
         </instancedMesh>
     );

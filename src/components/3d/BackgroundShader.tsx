@@ -39,14 +39,18 @@ float snoise(vec2 v) {
 }
 
 void main() {
-    float noise = snoise(vUv * 3.0 + uTime * 0.1);
-    float vignette = 1.0 - length(vUv - 0.5) * 1.5;
+    float noise = snoise(vUv * 3.0 + uTime * 0.05);
+    // Ensure length doesn't cause artifacts, though length(vUv-0.5) is stable
+    float dist = length(vUv - 0.5);
+    float vignette = 1.0 - dist * 1.5;
     
     // Mix black with the active flavor color based on noise
-    vec3 color = mix(vec3(0.0), uColor, (noise + 1.0) * 0.2);
+    // Using a more stable noise mapping
+    float intensity = clamp((noise + 1.0) * 0.25, 0.0, 1.0);
+    vec3 color = mix(vec3(0.01), uColor * 0.5, intensity);
     
-    // Apply vignette
-    color *= smoothstep(0.0, 1.0, vignette);
+    // Apply vignette with clamp to avoid negative values
+    color *= smoothstep(0.0, 1.0, clamp(vignette, 0.0, 1.0));
 
     gl_FragColor = vec4(color, 1.0);
 }
@@ -83,14 +87,14 @@ export default function BackgroundShader() {
     });
 
     return (
-        <mesh ref={meshRef} position={[0, 0, -15]} scale={[40, 40, 1]}>
+        <mesh ref={meshRef} position={[0, 0, -20]} scale={[100, 100, 1]}>
             <planeGeometry args={[1, 1]} />
             <shaderMaterial
                 fragmentShader={fragmentShader}
                 vertexShader={vertexShader}
                 uniforms={uniforms}
-                transparent
-                opacity={0.8}
+                depthWrite={false}
+                depthTest={false}
             />
         </mesh>
     );
