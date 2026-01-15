@@ -9,15 +9,20 @@ const nextConfig: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    minimumCacheTTL: 60,
   },
   experimental: {
     optimizePackageImports: [
       '@react-three/drei',
       '@react-three/fiber',
       'lucide-react',
-      'framer-motion'
+      'framer-motion',
+      'three'
     ],
+    optimizeCss: true,
+    webpackBuildWorker: true,
   },
+  productionBrowserSourceMaps: false, // Disable source maps for faster builds
 };
 
 const withPWA = withPWAInit({

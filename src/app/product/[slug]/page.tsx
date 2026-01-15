@@ -16,13 +16,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         const productDoc = await Product.findOne({ slug }).lean();
         if (productDoc) {
             product = {
-                ...productDoc,
                 _id: productDoc._id.toString(),
-                user: productDoc.user.toString(),
+                name: productDoc.name,
+                price: productDoc.price,
+                description: productDoc.description,
+                image: productDoc.image,
+                flavor: productDoc.flavor,
+                color: productDoc.color || '#00f0ff',
+                numReviews: productDoc.numReviews || 0,
+                rating: productDoc.rating || 0,
                 reviews: productDoc.reviews ? productDoc.reviews.map((r: any) => ({
-                    ...r,
                     _id: r._id.toString(),
-                    user: r.user.toString(),
+                    name: r.name,
+                    rating: r.rating,
+                    comment: r.comment,
                     createdAt: r.createdAt.toISOString()
                 })) : []
             };

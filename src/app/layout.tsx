@@ -3,10 +3,23 @@ import { Inter, Orbitron } from "next/font/google"; // Import Orbitron for headi
 import "./globals.css";
 import SmoothScroll from "@/components/ui/SmoothScroll";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter", display: 'swap' });
-const orbitron = Orbitron({ subsets: ["latin"], variable: "--font-orbitron", display: 'swap' });
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: false // Prevents unused font preloads
+});
+const orbitron = Orbitron({
+  subsets: ["latin"],
+  variable: "--font-orbitron",
+  display: 'swap',
+  preload: true,
+  adjustFontFallback: false
+});
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || 'https://vertex-energy.vercel.app'),
   title: "VERTEX | Reach Your Peak",
   description: "The next generation of hydration. Zero sugar. Infinite power. Experience the future of energy drinks.",
   keywords: ["energy drink", "vertex", "vertex energy", "3d website", "three.js", "next.js"],

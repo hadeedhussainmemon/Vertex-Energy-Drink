@@ -44,7 +44,7 @@ export default function FloatingParticles({ count = 20 }) {
         }
 
         particles.forEach((particle, i) => {
-            let { factor, speed, xFactor, yFactor, zFactor } = particle;
+            const { factor, speed, xFactor, yFactor, zFactor } = particle;
             const t = particle.t += speed / 2;
             const a = Math.cos(t) + Math.sin(t * 1) / 10;
             const b = Math.sin(t) + Math.cos(t * 2) / 10;

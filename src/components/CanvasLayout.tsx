@@ -60,17 +60,24 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                 frameloop={isVisible ? "always" : "never"}
                 camera={{ position: [0, 0, 5], fov: 45 }}
                 gl={{
-                    antialias: !isMobile,
+                    antialias: false, // Disabled for better performance
                     alpha: true,
                     powerPreference: "high-performance",
                     preserveDrawingBuffer: false,
                     stencil: false,
-                    depth: true
+                    depth: true,
+                    failIfMajorPerformanceCaveat: false
                 }}
                 onCreated={({ gl }) => {
                     const handleContextLost = (e: Event) => {
                         e.preventDefault();
                         console.warn("VERTEX: WebGL Context Lost. Attempting recovery...");
+                        // Force reload on repeated context loss
+                        setTimeout(() => {
+                            if (gl.getContext().isContextLost()) {
+                                window.location.reload();
+                            }
+                        }, 3000);
                     };
                     const handleContextRestored = () => {
                         console.info("VERTEX: WebGL Context Restored.");
@@ -82,7 +89,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     // Explicit cleanup on window unload or component unmount to prevent leaks
                     window.addEventListener("beforeunload", () => gl.dispose());
                 }}
-                dpr={isMobile ? 1 : [1, 1.5]}
+                dpr={isMobile ? 1 : 1.25} // Reduced from [1, 1.5] to prevent memory issues
                 shadows={false}
             >
                 <Suspense fallback={null}>
@@ -97,13 +104,12 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
 
                     {!isMobile && (
                         <EffectComposer enableNormalPass={false} multisampling={0}>
-                            <Bloom luminanceThreshold={1} luminanceSmoothing={0.9} height={300} intensity={1} />
-                            <ScrollingAberration />
+                            <Bloom luminanceThreshold={1.2} luminanceSmoothing={0.9} height={200} intensity={0.8} />
                         </EffectComposer>
                     )}
 
                     <Sparkles
-                        count={isMobile ? 20 : 150} // Significantly reduced to avoid buffer overhead
+                        count={isMobile ? 15 : 80} // Reduced from 150 to prevent GPU overload
                         scale={[20, 20, 10]}
                         size={isMobile ? 4 : 2}
                         speed={0.3}
@@ -111,11 +117,10 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                         color="#ffffff"
                     />
 
-                    <FloatingParticles count={isMobile ? 8 : 20} />
+                    <FloatingParticles count={isMobile ? 5 : 12} /> {/* Reduced from 20 */}
 
-                    {!isMobile && <EnergyShards count={20} />}
-                    {!isMobile && <CyberRings />}
-                    {!isMobile && <CyberGrid />}
+                    {!isMobile && <EnergyShards count={12} />} {/* Reduced from 20 */}
+                    {!isMobile && performanceFactor > 0.7 && <CyberRings />}
 
                     {/* Performance Optimization Hooks */}
                     <AdaptiveDpr pixelated />
@@ -125,10 +130,9 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                         onDecline={() => setPerformanceFactor(0.5)}
                     />
 
-                    <FloatingCans count={isMobile ? 5 : (20 * performanceFactor)} />
+                    <FloatingCans count={isMobile ? 3 : Math.floor(10 * performanceFactor)} /> {/* Reduced from 20 */}
 
-                    {/* Only run complex shader on desktop or high-perf devices */}
-                    {(!isMobile && performanceFactor > 0.6) && <BackgroundShader />}
+                    {/* Disabled heavy effects to prevent WebGL context loss */}
                     <Preload all />
                 </Suspense>
             </Canvas>
