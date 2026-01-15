@@ -2,7 +2,7 @@
 
 import { Canvas } from "@react-three/fiber";
 import { Suspense, useState, useEffect, useRef } from "react";
-import { Environment, Sparkles, Preload, AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from "@react-three/drei";
+import { Sparkles, Preload, AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
 import FloatingParticles from "./3d/FloatingParticles";
 import BackgroundShader from "./3d/BackgroundShader";
@@ -128,11 +128,11 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     <ambientLight intensity={isMobile ? 0.8 : 0.6} />
                     <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
                     <pointLight position={[-10, -10, -10]} intensity={1} />
+                    <pointLight position={[0, 5, 5]} intensity={0.5} color="#00f0ff" />
 
                     {children}
 
-                    {/* Use local city preset if available, or simpler lighting to avoid githack latency/crashes */}
-                    <Environment preset="apartment" />
+                    {/* Removed remote Environment to prevent CORS errors */}
 
                     {!isMobile && (
                         <EffectComposer enableNormalPass={false} multisampling={0}>

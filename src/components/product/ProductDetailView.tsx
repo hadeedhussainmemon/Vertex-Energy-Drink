@@ -9,7 +9,7 @@ import CanSkeleton from "@/components/3d/CanSkeleton";
 
 // Dynamic load for 3D to avoid SSR issues
 import { Canvas } from "@react-three/fiber";
-import { Environment, OrbitControls } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 
 const Can = dynamic(() => import("@/components/3d/Can"), { ssr: false });
 
@@ -75,7 +75,11 @@ export default function ProductDetailView({ product }: { product: Product }) {
                                 <ambientLight intensity={0.7} />
                                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
                                 <pointLight position={[-10, -10, -10]} intensity={1} />
-                                <Environment preset="city" />
+                                <ambientLight intensity={0.7} />
+                                <spotLight position={[10, 10, 10]} angle={0.3} penumbra={1} intensity={1.5} />
+                                <pointLight position={[-10, 0, -10]} intensity={0.8} />
+                                <pointLight position={[0, 10, 5]} intensity={0.6} color="#00f0ff" />
+                                {/* Removed Environment to prevent CORS errors */}
                                 <OrbitControls enableZoom={false} autoRotate autoRotateSpeed={2} />
                                 <Suspense fallback={<CanSkeleton />}>
                                     <Can color={product.color} />
