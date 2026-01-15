@@ -19,7 +19,15 @@ export default function Preloader() {
             });
         }, 15); // Smoother animation
 
-        return () => clearInterval(interval);
+        // Prevent body scroll while loading
+        document.body.style.overflow = 'hidden';
+        document.body.style.height = '100vh';
+
+        return () => {
+            clearInterval(interval);
+            document.body.style.overflow = '';
+            document.body.style.height = '';
+        };
     }, []);
 
     return (
@@ -30,7 +38,8 @@ export default function Preloader() {
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0, scale: 1.1 }}
                     transition={{ duration: 0.6, ease: "easeInOut" }}
-                    className="fixed inset-0 z-[9999] bg-gradient-to-br from-black via-zinc-900 to-black flex items-center justify-center overflow-hidden"
+                    className="fixed inset-0 w-screen h-screen z-[9999] bg-gradient-to-br from-black via-zinc-900 to-black flex items-center justify-center overflow-hidden"
+                    style={{ height: '100vh', width: '100vw' }}
                 >
                     {/* Animated Grid Background */}
                     <div className="absolute inset-0 opacity-20">
