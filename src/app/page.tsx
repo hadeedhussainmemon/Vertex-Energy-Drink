@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { Suspense } from "react";
+import { Suspense, useState, useEffect } from "react";
 import HeroSection from "@/components/Hero/HeroSection";
 // Defer sections that are below the fold
 const FlavorSection = dynamic(() => import("@/components/Flavor/FlavorSection"), { ssr: false });
@@ -21,18 +21,29 @@ const CanvasLayout = dynamic(() => import("@/components/CanvasLayout"), {
 const Can = dynamic(() => import("@/components/3d/Can"), { ssr: false });
 
 export default function Home() {
+  // Detect mobile on client side
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768);
+  }, []);
+
   return (
-    <main className="relative w-full min-h-screen overflow-x-hidden" style={{ perspective: "2000px" }}>
-      {/* 3D Scene Layer - Loaded Dynamically with Error Boundary */}
-      <WebGLErrorBoundary fallback={<div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-zinc-900 to-black" />}>
-        <div className="fixed inset-0 z-0 pointer-events-none">
-          <CanvasLayout>
-            <Suspense fallback={<CanSkeleton />}>
-              <Can />
-            </Suspense>
-          </CanvasLayout>
-        </div>
-      </WebGLErrorBoundary>
+    <main className="relative w-full min-h-screen overflow-x-hidden">
+      {/* 3D Scene Layer - DESKTOP ONLY for performance */}
+      {!isMobile ? (
+        <WebGLErrorBoundary fallback={<div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-zinc-900 to-black" />}>
+          <div className="fixed inset-0 z-0 pointer-events-none">
+            <CanvasLayout>
+              <Suspense fallback={<CanSkeleton />}>
+                <Can />
+              </Suspense>
+            </CanvasLayout>
+          </div>
+        </WebGLErrorBoundary>
+      ) : (
+        <div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-zinc-900 to-black" />
+      )}
 
       {/* HTML Content Layer - PageTurn DISABLED due to scroll lag */}
       <div className="relative z-10">

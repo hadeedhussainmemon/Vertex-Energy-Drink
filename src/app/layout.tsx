@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Orbitron } from "next/font/google"; // Import Orbitron for headings
 import "./globals.css";
-import SmoothScroll from "@/components/ui/SmoothScroll";
+// SmoothScroll removed - causes scroll jank
 
 const inter = Inter({
   subsets: ["latin"],
@@ -34,11 +34,11 @@ export const metadata: Metadata = {
 
 };
 
-import CustomCursor from "@/components/ui/CustomCursor";
+// CustomCursor removed - CPU intensive
 import CartDrawer from "@/components/ui/CartDrawer";
 import AppShell from "@/components/layout/AppShell";
 
-import NoiseOverlay from "@/components/ui/NoiseOverlay";
+// NoiseOverlay removed - not critical
 import Preloader from "@/components/ui/Preloader";
 import CommandMenu from "@/components/ui/CommandMenu";
 
@@ -60,8 +60,7 @@ export default function RootLayout({
         <SoundProvider>
           <Preloader />
           <CommandMenu />
-          <NoiseOverlay />
-          <CustomCursor />
+          {/* NoiseOverlay & CustomCursor removed for performance */}
           <CartDrawer />
           <AppShell>
             {children}
