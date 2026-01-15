@@ -68,7 +68,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     depth: true,
                     failIfMajorPerformanceCaveat: false
                 }}
-                onCreated={({ gl }) => {
+                onCreated={({ gl, scene }) => {
                     const handleContextLost = (e: Event) => {
                         e.preventDefault();
                         console.warn("VERTEX: WebGL Context Lost. Attempting recovery...");
@@ -86,8 +86,40 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     gl.domElement.addEventListener("webglcontextlost", handleContextLost, false);
                     gl.domElement.addEventListener("webglcontextrestored", handleContextRestored, false);
 
-                    // Explicit cleanup on window unload or component unmount to prevent leaks
-                    window.addEventListener("beforeunload", () => gl.dispose());
+                    // Aggressive memory cleanup function
+                    const cleanupResources = () => {
+                        scene.traverse((object) => {
+                            if ((object as any).geometry) {
+                                (object as any).geometry.dispose();
+                            }
+                            if ((object as any).material) {
+                                const materials = Array.isArray((object as any).material)
+                                    ? (object as any).material
+                                    : [(object as any).material];
+                                materials.forEach((material: any) => {
+                                    Object.keys(material).forEach(prop => {
+                                        if (material[prop]?.dispose) {
+                                            material[prop].dispose();
+                                        }
+                                    });
+                                    material.dispose();
+                                });
+                            }
+                        });
+                    };
+
+                    // Cleanup on window unload
+                    window.addEventListener("beforeunload", () => {
+                        cleanupResources();
+                        gl.dispose();
+                    });
+
+                    // Cleanup when page is hidden (tab switch, minimize)
+                    document.addEventListener("visibilitychange", () => {
+                        if (document.hidden) {
+                            gl.dispose();
+                        }
+                    });
                 }}
                 dpr={isMobile ? 1 : 1.25} // Reduced from [1, 1.5] to prevent memory issues
                 shadows={false}

@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import HeroSection from "@/components/Hero/HeroSection";
+import PageTurn from "@/components/ui/PageTurn";
 // Defer sections that are below the fold
 const FlavorSection = dynamic(() => import("@/components/Flavor/FlavorSection"), { ssr: false });
 const IngredientSection = dynamic(() => import("@/components/Ingredients/IngredientSection"), { ssr: false });
@@ -21,7 +22,7 @@ const Can = dynamic(() => import("@/components/3d/Can"), { ssr: false });
 
 export default function Home() {
   return (
-    <main className="relative w-full min-h-screen overflow-x-hidden">
+    <main className="relative w-full min-h-screen overflow-x-hidden" style={{ perspective: "2000px" }}>
       {/* 3D Scene Layer - Loaded Dynamically */}
       <div className="fixed inset-0 z-0 pointer-events-none">
         <CanvasLayout>
@@ -31,13 +32,22 @@ export default function Home() {
         </CanvasLayout>
       </div>
 
-      {/* HTML Content Layer */}
+      {/* HTML Content Layer with Page Turn Animation */}
       <div className="relative z-10">
-        <HeroSection />
-        <FlavorSection />
-        <IngredientSection />
-        <ShopSection />
+        <PageTurn>
+          <HeroSection />
+        </PageTurn>
+        <PageTurn>
+          <FlavorSection />
+        </PageTurn>
+        <PageTurn>
+          <IngredientSection />
+        </PageTurn>
+        <PageTurn>
+          <ShopSection />
+        </PageTurn>
       </div>
     </main>
   );
 }
+

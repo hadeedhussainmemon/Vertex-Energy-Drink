@@ -34,6 +34,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Enable hardware acceleration for better performance */
+  transform: translateZ(0);
 }
 
 h1,
@@ -90,6 +92,13 @@ html {
   scrollbar-width: none;
 }
 
+/* Page Turn Animation - Memory Optimized */
+.page-turn {
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
 /* Brutalist Utility */
 .text-mega {
   font-size: clamp(4rem, 15vw, 12rem);
@@ -98,155 +107,119 @@ html {
 }
 
 @utility text-neon-blue {
-  color: var(--color-neon-blue);
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+  color: var(--neon-blue);
 }
 
 @utility text-neon-green {
-  color: var(--color-neon-green);
-  text-shadow: 0 0 10px rgba(57, 255, 20, 0.7);
+  color: var(--neon-green);
 }
 
 @utility text-neon-red {
-  color: var(--color-neon-red);
-  text-shadow: 0 0 10px rgba(255, 0, 60, 0.7);
+  color: var(--neon-red);
 }
 
-@utility bg-glass {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-  backdrop-filter: blur(12px);
+/* ===== Premium Design Effects =====*/
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.5);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 }
 
-/* Glitch Effect */
-.glitch-text {
+/* Neon Text Glow */
+.neon-glow {
+  text-shadow: 0 0 10px currentColor, 0 0 20px currentColor,
+    0 0 40px currentColor;
+}
+
+/* Interactive Neon Glow on Hover */
+.neon-hover {
+  transition: text-shadow 0.3s ease;
+}
+
+.neon-hover:hover {
+  text-shadow: 0 0 15px currentColor, 0 0 30px currentColor,
+    0 0 60px currentColor;
+}
+
+/* Cyber Glow Box */
+.cyber-box {
+  box-shadow: 0 0 15px rgba(0, 245, 255, 0.4), 0 0 30px rgba(0, 245, 255, 0.2);
+  transition: box-shadow 0.3s ease;
+}
+
+.cyber-box:hover {
+  box-shadow: 0 0 25px rgba(0, 245, 255, 0.6), 0 0 50px rgba(0, 245, 255, 0.3);
+}
+
+/* Noise Overlay */
+.noise-overlay {
   position: relative;
-  animation: glitch 1s linear infinite;
-}
-
-@keyframes glitch {
-
-  2%,
-  64% {
-    transform: translate(2px, 0) skew(0deg);
-  }
-
-  4%,
-  60% {
-    transform: translate(-2px, 0) skew(0deg);
-  }
-
-  62% {
-    transform: translate(0, 0) skew(5deg);
-  }
-}
-
-.glitch-text:before,
-.glitch-text:after {
-  content: attr(title);
-  position: absolute;
-  left: 0;
-}
-
-.glitch-text:before {
-  animation: glitchTop 1s linear infinite;
-  clip-path: polygon(0 0, 100% 0, 100% 33%, 0 33%);
-}
-
-@keyframes glitchTop {
-
-  2%,
-  64% {
-    transform: translate(2px, -2px);
-  }
-
-  4%,
-  60% {
-    transform: translate(-2px, 2px);
-  }
-
-  62% {
-    transform: translate(13px, -1px) skew(-13deg);
-  }
-}
-
-.glitch-text:after {
-  animation: glitchBotom 1.5s linear infinite;
-  clip-path: polygon(0 67%, 100% 67%, 100% 100%, 0 100%);
-}
-
-@keyframes glitchBotom {
-
-  2%,
-  64% {
-    transform: translate(-2px, 0);
-  }
-
-  4%,
-  60% {
-    transform: translate(-2px, 0);
-  }
-
-  62% {
-    transform: translate(-22px, 5px) skew(21deg);
-  }
-}
-
-
-
-/* HIGH-PERFORMANCE VISUAL SPEED SYSTEM */
-.bg-speed-container {
   overflow: hidden;
-  background: var(--background);
 }
 
-.speed-bg-img {
-  animation: zoom-pulse 20s ease-in-out infinite alternate;
-  filter: brightness(0.7) contrast(1.1);
+.noise-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 1;
 }
 
-@keyframes zoom-pulse {
-  0% {
-    transform: scale(1);
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-}
-
+/* Speed Lines - Moved to CSS for better performance */
 .speed-lines {
   position: absolute;
   inset: 0;
   background: repeating-linear-gradient(90deg,
-      transparent 0px,
-      transparent 49px,
-      rgba(255, 255, 255, 0.03) 50px);
-  background-size: 200% 100%;
-  animation: speed-scan 10s linear infinite;
+      transparent,
+      transparent 20px,
+      rgba(0, 245, 255, 0.03) 20px,
+      rgba(0, 245, 255, 0.03) 22px);
+  animation: slide-lines 20s linear infinite;
   pointer-events: none;
 }
 
-@keyframes speed-scan {
-  from {
-    background-position: 0% 0;
+@keyframes slide-lines {
+  0% {
+    transform: translateX(0);
   }
 
-  to {
-    background-position: 100% 0;
+  100% {
+    transform: translateX(100px);
   }
 }
 
+/* Speed Background - Optimized */
+.speed-bg-img {
+  animation: pulse-slow 15s ease-in-out infinite;
+}
+
+@keyframes pulse-slow {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+/* Scanline Effect */
 .scanline {
   position: absolute;
   width: 100%;
-  height: 2px;
-  background: rgba(0, 229, 255, 0.1);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.2);
-  top: -100px;
+  height: 5px;
+  background: linear-gradient(to bottom,
+      transparent,
+      rgba(0, 245, 255, 0.4),
+      transparent);
   animation: scanline 8s linear infinite;
   z-index: 5;
   pointer-events: none;
