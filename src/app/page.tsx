@@ -3,7 +3,6 @@
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import HeroSection from "@/components/Hero/HeroSection";
-import PageTurn from "@/components/ui/PageTurn";
 // Defer sections that are below the fold
 const FlavorSection = dynamic(() => import("@/components/Flavor/FlavorSection"), { ssr: false });
 const IngredientSection = dynamic(() => import("@/components/Ingredients/IngredientSection"), { ssr: false });
@@ -35,20 +34,12 @@ export default function Home() {
         </div>
       </WebGLErrorBoundary>
 
-      {/* HTML Content Layer with Page Turn Animation */}
+      {/* HTML Content Layer - PageTurn DISABLED due to scroll lag */}
       <div className="relative z-10">
-        <PageTurn>
-          <HeroSection />
-        </PageTurn>
-        <PageTurn>
-          <FlavorSection />
-        </PageTurn>
-        <PageTurn>
-          <IngredientSection />
-        </PageTurn>
-        <PageTurn>
-          <ShopSection />
-        </PageTurn>
+        <HeroSection />
+        <FlavorSection />
+        <IngredientSection />
+        <ShopSection />
       </div>
     </main>
   );

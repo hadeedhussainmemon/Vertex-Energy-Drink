@@ -57,7 +57,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
             </div>
 
             <Canvas
-                frameloop="demand" // Only render when needed, not continuously
+                frameloop="never" // NEVER render unless explicitly needed - maximum performance
                 camera={{ position: [0, 0, 5], fov: 45 }}
                 gl={{
                     antialias: false, // Disabled for better performance
@@ -134,35 +134,43 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
 
                     {/* Removed remote Environment to prevent CORS errors */}
 
-                    {!isMobile && (
+                    {/* DISABLED BLOOM - Too heavy */}
+                    {/* {!isMobile && (
                         <EffectComposer enableNormalPass={false} multisampling={0}>
                             <Bloom luminanceThreshold={1.2} luminanceSmoothing={0.9} height={200} intensity={0.8} />
                         </EffectComposer>
-                    )}
+                    )} */}
 
+                    {/* REDUCED PARTICLES - Emergency lag fix */}
                     <Sparkles
-                        count={isMobile ? 15 : 80} // Reduced from 150 to prevent GPU overload
+                        count={isMobile ? 5 : 15} // DRASTICALLY reduced from 80
                         scale={[20, 20, 10]}
-                        size={isMobile ? 4 : 2}
-                        speed={0.3}
-                        opacity={0.3}
+                        size={isMobile ? 6 : 3}
+                        speed={0.2}
+                        opacity={0.2}
                         color="#ffffff"
                     />
 
-                    <FloatingParticles count={isMobile ? 5 : 12} /> {/* Reduced from 20 */}
+                    <FloatingParticles count={isMobile ? 2 : 5} /> {/* Reduced from 12 */}
 
-                    {!isMobile && <EnergyShards count={12} />} {/* Reduced from 20 */}
-                    {!isMobile && performanceFactor > 0.7 && <CyberRings />}
+                    {/* DISABLED ALL HEAVY EFFECTS */}
+                    {/* {!isMobile && <EnergyShards count={12} />} */}
+                    {/* {!isMobile && performanceFactor > 0.7 && <CyberRings />} */}
 
                     {/* Performance Optimization Hooks */}
                     <AdaptiveDpr pixelated />
                     <AdaptiveEvents />
                     <PerformanceMonitor
-                        onIncline={() => setPerformanceFactor(1)}
-                        onDecline={() => setPerformanceFactor(0.5)}
+                        onDecline={(fps) => {
+                            console.warn(`FPS declined to ${fps}`);
+                            setPerformanceFactor(prev => Math.max(0.3, prev - 0.1));
+                        }}
+                        onChange={({ fps }) => {
+                            if (fps > 50) setPerformanceFactor(prev => Math.min(1, prev + 0.05));
+                        }}
                     />
 
-                    <FloatingCans count={isMobile ? 3 : Math.floor(10 * performanceFactor)} /> {/* Reduced from 20 */}
+                    <FloatingCans count={isMobile ? 1 : 3} /> {/* Reduced from 10 */}
 
                     {/* Disabled heavy effects to prevent WebGL context loss */}
                     <Preload all />
