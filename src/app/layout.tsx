@@ -43,6 +43,8 @@ import Preloader from "@/components/ui/Preloader";
 import CommandMenu from "@/components/ui/CommandMenu";
 
 import { SoundProvider } from "@/context/SoundContext";
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export default function RootLayout({
   children,
@@ -65,6 +67,8 @@ export default function RootLayout({
             {children}
           </AppShell>
         </SoundProvider>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -10,6 +10,7 @@ const IngredientSection = dynamic(() => import("@/components/Ingredients/Ingredi
 const ShopSection = dynamic(() => import("@/components/Shop/ShopSection"), { ssr: false });
 
 import CanSkeleton from "@/components/3d/CanSkeleton";
+import WebGLErrorBoundary from "@/components/ui/WebGLErrorBoundary";
 
 // Lazy load the 3D Canvas to reduce Total Blocking Time (TBT)
 const CanvasLayout = dynamic(() => import("@/components/CanvasLayout"), {
@@ -23,14 +24,16 @@ const Can = dynamic(() => import("@/components/3d/Can"), { ssr: false });
 export default function Home() {
   return (
     <main className="relative w-full min-h-screen overflow-x-hidden" style={{ perspective: "2000px" }}>
-      {/* 3D Scene Layer - Loaded Dynamically */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <CanvasLayout>
-          <Suspense fallback={<CanSkeleton />}>
-            <Can />
-          </Suspense>
-        </CanvasLayout>
-      </div>
+      {/* 3D Scene Layer - Loaded Dynamically with Error Boundary */}
+      <WebGLErrorBoundary fallback={<div className="fixed inset-0 z-0 bg-gradient-to-br from-black via-zinc-900 to-black" />}>
+        <div className="fixed inset-0 z-0 pointer-events-none">
+          <CanvasLayout>
+            <Suspense fallback={<CanSkeleton />}>
+              <Can />
+            </Suspense>
+          </CanvasLayout>
+        </div>
+      </WebGLErrorBoundary>
 
       {/* HTML Content Layer with Page Turn Animation */}
       <div className="relative z-10">
