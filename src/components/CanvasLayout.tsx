@@ -1,6 +1,6 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useState, useEffect, useRef } from "react";
 import { Sparkles, Preload, AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from "@react-three/drei";
 import { EffectComposer, Bloom } from "@react-three/postprocessing";
@@ -57,7 +57,7 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
             </div>
 
             <Canvas
-                frameloop={isVisible ? "always" : "never"}
+                frameloop="demand" // Only render when needed, not continuously
                 camera={{ position: [0, 0, 5], fov: 45 }}
                 gl={{
                     antialias: false, // Disabled for better performance
@@ -166,8 +166,38 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
 
                     {/* Disabled heavy effects to prevent WebGL context loss */}
                     <Preload all />
+
+                    {/* Frame limiter to prevent GPU overload */}
+                    <FrameLimiter maxFps={isMobile ? 24 : 30} />
                 </Suspense>
             </Canvas>
         </div>
     );
+}
+
+// Frame limiter component to cap FPS and reduce GPU load
+function FrameLimiter({ maxFps }: { maxFps: number }) {
+    const { invalidate, advance } = useThree((state) => ({
+        invalidate: state.invalidate,
+        advance: state.advance
+    }));
+
+    useEffect(() => {
+        const interval = 1000 / maxFps;
+        let lastTime = performance.now();
+
+        const animate = (time: number) => {
+            const delta = time - lastTime;
+            if (delta >= interval) {
+                advance(time / 1000);
+                lastTime = time - (delta % interval);
+            }
+            requestAnimationFrame(animate);
+        };
+
+        const rafId = requestAnimationFrame(animate);
+        return () => cancelAnimationFrame(rafId);
+    }, [maxFps, advance]);
+
+    return null;
 }
