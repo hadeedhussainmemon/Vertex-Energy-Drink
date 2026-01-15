@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useState } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { Group } from "three";
@@ -40,11 +40,22 @@ export default function Can({ color }: CanProps) {
     const finalColor = color || storeColor;
     const modelPath = getModelPath(finalColor);
 
-    // Load the specific GLB model based on color/flavor with Draco, Meshopt, and KTX2 support
-    const { scene } = useGLTF(modelPath, DRACO_URL, true);
+    // Load with fallback - always load default first to prevent crashes
+    const defaultModel = useGLTF("/models/cyber_citrus_ultra.glb", DRACO_URL, true);
+    let targetModel;
+
+    try {
+        targetModel = useGLTF(modelPath, DRACO_URL, true);
+    } catch (err) {
+        console.warn(`Failed to load ${modelPath}, using default`, err);
+        targetModel = defaultModel;
+    }
+
+    const scene = targetModel?.scene || defaultModel.scene;
 
     // Optimize: Use material pooling instead of cloning every render
     const clone = useMemo(() => {
+        if (!scene) return null;
         const c = scene.clone();
 
         // Ensure we have a pooled material for this color
@@ -69,8 +80,6 @@ export default function Can({ color }: CanProps) {
         if (!groupRef.current) return;
 
         // Target rotation based on mouse position
-        // X rotate based on Y mouse (up/down)
-        // Y rotate based on X mouse (left/right)
         const targetX = -state.mouse.y * 0.5;
         const targetY = state.mouse.x * 0.5;
 
@@ -79,10 +88,11 @@ export default function Can({ color }: CanProps) {
         groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.1);
     });
 
+    if (!clone) return null;
+
     return (
         <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
             <group ref={groupRef} dispose={null}>
-                {/* Resize ensures the model fits within a standard 1 unit box, then we scale it up */}
                 <Resize scale={3}>
                     <Center>
                         <primitive object={clone} />
