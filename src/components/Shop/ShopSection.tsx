@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+import { useAutoAnimate } from '@formkit/auto-animate/react';
 import Image from "next/image";
 import { useStore } from "@/lib/store";
 import { useGLTF } from "@react-three/drei";
@@ -78,6 +78,10 @@ export default function ShopSection() {
         });
     };
 
+    const [parent] = useAutoAnimate();
+
+    // ... (rest of component logic)
+
     return (
         <section id="shop" className="min-h-screen py-20 relative z-10">
             <div className="container mx-auto px-4">
@@ -98,20 +102,16 @@ export default function ShopSection() {
                         ))}
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                    <div
+                        ref={parent}
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 max-w-6xl mx-auto"
+                    >
                         {products.map((p) => (
-                            <motion.div
+                            <div
                                 key={p._id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                className="bg-glass rounded-2xl overflow-hidden group hover:border-neon-blue/50 transition-all duration-300"
+                                className="bg-glass rounded-2xl overflow-hidden group hover:border-neon-blue/50 transition-all duration-300 animate-fade-in-up"
                                 onMouseEnter={() => {
-                                    // Pre-warm the 3D model for this flavor when hovered
-                                    // This makes the transition to the product page feel instant
-                                    const model = getModelPath(p.bgImage ? undefined : "#39ff14"); // Fallback logic
-                                    // Actually we need the color mapping which we don't have strictly in product object here
-                                    // but we can guess or use a default.
+                                    const model = getModelPath(p.bgImage ? undefined : "#39ff14");
                                     useGLTF.preload("/models/cyber_citrus_ultra.glb", DRACO_URL);
                                     useGLTF.preload("/models/neon_berry_ultra.glb", DRACO_URL);
                                     useGLTF.preload("/models/apex_red_ultra.glb", DRACO_URL);
@@ -120,7 +120,6 @@ export default function ShopSection() {
                                 <a href={`/product/${p.slug}`} className="block h-full cursor-pointer">
                                     <div className="h-80 bg-black/50 flex items-center justify-center relative overflow-hidden p-8">
                                         <div className="absolute inset-0 bg-radial-gradient from-neon-blue/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                                        {/* Real Image */}
                                         {p.bgImage && (
                                             <div className="absolute inset-0 z-0">
                                                 <Image
@@ -149,7 +148,7 @@ export default function ShopSection() {
                                         <div className="flex justify-between items-center border-t border-white/10 pt-4 mt-auto">
                                             <span className="text-neon-blue font-mono text-xl font-bold">${p.price}</span>
                                             <div onClick={(e) => {
-                                                e.preventDefault(); // Prevent navigation when clicking ADD
+                                                e.preventDefault();
                                                 handleAdd(p);
                                             }}>
                                                 <button
@@ -161,7 +160,7 @@ export default function ShopSection() {
                                         </div>
                                     </div>
                                 </a>
-                            </motion.div>
+                            </div>
                         ))}
                     </div>
                 )}

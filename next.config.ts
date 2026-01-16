@@ -23,6 +23,31 @@ const nextConfig: NextConfig = {
     webpackBuildWorker: true,
   },
   productionBrowserSourceMaps: false, // Disable source maps for faster builds
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+        ],
+      },
+    ];
+  },
 };
 
 const withPWA = withPWAInit({
@@ -63,4 +88,9 @@ const sentryOptions = {
   tunnelRoute: "/monitoring",
 };
 
-export default withSentryConfig(withPWA(nextConfig), sentryOptions);
+// Initialize Bundle Analyzer
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+
+export default withSentryConfig(withBundleAnalyzer(withPWA(nextConfig)), sentryOptions);

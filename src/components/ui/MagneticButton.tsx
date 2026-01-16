@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+
 import { useRef, useState } from "react";
 
 import { useSoundContext } from "@/context/SoundContext";
@@ -24,6 +24,7 @@ export default function MagneticButton({ children, className = "", onClick }: { 
         onClick?.();
     };
 
+
     const reset = () => {
         setPosition({ x: 0, y: 0 });
     };
@@ -31,18 +32,20 @@ export default function MagneticButton({ children, className = "", onClick }: { 
     const { x, y } = position;
 
     return (
-        <motion.button
+        <button
             ref={ref}
             onMouseMove={handleMouse}
             onMouseLeave={reset}
             onClick={handleClick}
-            animate={{ x, y }}
-            transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+            style={{
+                transform: `translate(${x}px, ${y}px)`,
+                transition: position.x === 0 && position.y === 0 ? "transform 0.5s cubic-bezier(0.19, 1, 0.22, 1)" : "none"
+            }}
             className={`relative overflow-hidden group ${className}`}
         >
             <span className="relative z-10">{children}</span>
             {/* Hover Fill Effect */}
             <span className="absolute inset-0 bg-white translate-y-[100%] group-hover:translate-y-0 transition-transform duration-300 ease-in-out z-0 mix-blend-difference" />
-        </motion.button>
+        </button>
     );
 }

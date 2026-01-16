@@ -1,5 +1,7 @@
+
 "use client";
 
+/* eslint-disable react-hooks/purity */ // Random particles are intended
 import { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useStore } from "@/lib/store";

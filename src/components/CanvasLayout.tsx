@@ -2,15 +2,9 @@
 
 import { Canvas, useThree } from "@react-three/fiber";
 import { Suspense, useState, useEffect, useRef } from "react";
-import { Sparkles, Preload, AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from "@react-three/drei";
-import { EffectComposer, Bloom } from "@react-three/postprocessing";
+import { Sparkles, Preload, AdaptiveDpr, AdaptiveEvents } from "@react-three/drei";
 import FloatingParticles from "./3d/FloatingParticles";
-import BackgroundShader from "./3d/BackgroundShader";
-import EnergyShards from "./3d/EnergyShards";
-import ScrollingAberration from "./3d/ScrollAberration";
-import CyberRings from "./3d/CyberRings";
 import FloatingCans from "./3d/FloatingCans";
-import CyberGrid from "./3d/CyberGrid";
 
 import Image from "next/image";
 import usePerformance from "@/hooks/usePerformance";
@@ -22,7 +16,6 @@ interface CanvasLayoutProps {
 
 export default function CanvasLayout({ children, className = "fixed inset-0 z-0 pointer-events-none" }: CanvasLayoutProps) {
     const { isMobile } = usePerformance();
-    const [performanceFactor, setPerformanceFactor] = useState(1);
     const [isVisible, setIsVisible] = useState(true);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -160,15 +153,10 @@ export default function CanvasLayout({ children, className = "fixed inset-0 z-0 
                     {/* Performance Optimization Hooks */}
                     <AdaptiveDpr pixelated />
                     <AdaptiveEvents />
-                    <PerformanceMonitor
-                        onDecline={(fps) => {
-                            console.warn(`FPS declined to ${fps}`);
-                            setPerformanceFactor(prev => Math.max(0.3, prev - 0.1));
-                        }}
-                        onChange={({ fps }) => {
-                            if (fps > 50) setPerformanceFactor(prev => Math.min(1, prev + 0.05));
-                        }}
-                    />
+                    {/* Performance Optimization Hooks */}
+                    <AdaptiveDpr pixelated />
+                    <AdaptiveEvents />
+                    {/* PerformanceMonitor removed as heavy effects are disabled */}
 
                     <FloatingCans count={isMobile ? 1 : 3} /> {/* Reduced from 10 */}
 

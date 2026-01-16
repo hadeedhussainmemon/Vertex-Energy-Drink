@@ -45,6 +45,7 @@ import CommandMenu from "@/components/ui/CommandMenu";
 import { SoundProvider } from "@/context/SoundContext";
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 export default function RootLayout({
   children,
@@ -58,16 +59,20 @@ export default function RootLayout({
       </head>
       <body className="antialiased font-sans selection:bg-neon-blue selection:text-black">
         <SoundProvider>
-          <Preloader />
-          <CommandMenu />
-          {/* NoiseOverlay & CustomCursor removed for performance */}
-          <CartDrawer />
-          <AppShell>
-            {children}
-          </AppShell>
+          <ReactQueryProvider>
+            <Preloader />
+            <CommandMenu />
+            {/* NoiseOverlay & CustomCursor removed for performance */}
+            <CartDrawer />
+            <AppShell>
+              {children}
+            </AppShell>
+          </ReactQueryProvider>
         </SoundProvider>
         <Analytics />
         <SpeedInsights />
+        {/* CSS-only Noise Overlay for texture without performance cost */}
+        <div className="noise-overlay fixed inset-0 z-[9999] pointer-events-none opacity-20 mix-blend-overlay"></div>
       </body>
     </html>
   );

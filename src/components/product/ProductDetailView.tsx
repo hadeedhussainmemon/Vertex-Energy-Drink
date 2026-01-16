@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { motion } from "framer-motion";
+// motion removed
 import { useStore } from "@/lib/store";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
@@ -52,8 +52,34 @@ export default function ProductDetailView({ product }: { product: Product }) {
         });
     };
 
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": product.name,
+        "image": product.image,
+        "description": product.description,
+        "sku": product._id,
+        "offers": {
+            "@type": "Offer",
+            "url": typeof window !== 'undefined' ? window.location.href : '',
+            "priceCurrency": "USD",
+            "price": product.price,
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition"
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": product.rating,
+            "reviewCount": product.numReviews
+        }
+    };
+
     return (
         <div className="min-h-screen bg-black text-white pt-24 pb-12 relative overflow-hidden">
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+            />
             {/* Background Glow */}
             <div
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] rounded-full blur-[150px] opacity-20 pointer-events-none"
@@ -64,12 +90,7 @@ export default function ProductDetailView({ product }: { product: Product }) {
 
                 {/* LEFT: 3D Visualization */}
                 <div className="h-[50vh] lg:h-[80vh] w-full relative">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1 }}
-                        className="w-full h-full"
-                    >
+                    <div className="w-full h-full animate-fade-in-scale">
                         <div className="w-full h-full cursor-grab active:cursor-grabbing">
                             <Canvas camera={{ position: [0, 0, 7], fov: 45 }}>
                                 <ambientLight intensity={0.7} />
@@ -86,16 +107,12 @@ export default function ProductDetailView({ product }: { product: Product }) {
                                 </Suspense>
                             </Canvas>
                         </div>
-                    </motion.div>
+                    </div>
                 </div>
 
                 {/* RIGHT: Product Info */}
                 <div className="space-y-8">
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                    >
+                    <div className="animate-slide-in-right" style={{ animationDelay: '0.2s' }}>
                         <h1 className="text-6xl md:text-8xl font-black uppercase italic tracking-tighter mb-4 text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                             {product.name}
                         </h1>
@@ -103,14 +120,9 @@ export default function ProductDetailView({ product }: { product: Product }) {
                         <p className="text-white/90 text-lg leading-relaxed max-w-xl drop-shadow-[0_0_8px_rgba(0,0,0,0.5)]">
                             {product.description}
                         </p>
-                    </motion.div>
+                    </div>
 
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.4 }}
-                        className="flex items-center gap-8"
-                    >
+                    <div className="flex items-center gap-8 animate-slide-in-right" style={{ animationDelay: '0.4s' }}>
                         <div className="text-5xl font-bold font-mono">
                             ${product.price}
                         </div>
@@ -130,28 +142,19 @@ export default function ProductDetailView({ product }: { product: Product }) {
                                 +
                             </button>
                         </div>
-                    </motion.div>
+                    </div>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                    >
+                    <div className="animate-slide-in-up" style={{ animationDelay: '0.6s' }}>
                         <button
                             onClick={handleAddToCart}
                             className="w-full md:w-auto bg-white text-black text-xl font-black py-6 px-16 rounded-full hover:scale-105 hover:bg-neon-blue transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.3)]"
                         >
                             ADD TO ARSENAL
                         </button>
-                    </motion.div>
+                    </div>
 
                     {/* Technical Specs & Benefits */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.8 }}
-                        className="grid grid-cols-2 gap-6 pt-8 border-t border-white/10"
-                    >
+                    <div className="grid grid-cols-2 gap-6 pt-8 border-t border-white/10 animate-fade-in-up" style={{ animationDelay: '0.8s' }}>
                         <div className="space-y-2">
                             <h3 className="text-neon-blue font-bold text-sm tracking-widest uppercase mb-2">Performance</h3>
                             <ul className="text-gray-200 text-sm space-y-1">
@@ -168,7 +171,7 @@ export default function ProductDetailView({ product }: { product: Product }) {
                                 <li>• Bio-available Taurine</li>
                             </ul>
                         </div>
-                    </motion.div>
+                    </div>
 
                     {/* Nutritional Details */}
                     <div className="bg-zinc-900/50 p-6 rounded-2xl border border-white/5 grid grid-cols-3 gap-4 text-center">
@@ -210,10 +213,9 @@ export default function ProductDetailView({ product }: { product: Product }) {
                                             <div key={star} className="flex items-center gap-4 text-sm font-bold">
                                                 <span className="w-4">{star}</span>
                                                 <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden">
-                                                    <motion.div
-                                                        initial={{ width: 0 }}
-                                                        whileInView={{ width: `${percent}%` }}
-                                                        className="h-full bg-neon-blue shadow-[0_0_10px_rgba(0,229,255,0.5)]"
+                                                    <div
+                                                        className="h-full bg-neon-blue shadow-[0_0_10px_rgba(0,229,255,0.5)] transition-all duration-1000 ease-out"
+                                                        style={{ width: `${percent}%` }}
                                                     />
                                                 </div>
                                                 <span className="w-8 text-right opacity-50">{count}</span>
@@ -235,12 +237,11 @@ export default function ProductDetailView({ product }: { product: Product }) {
                                             <p className="text-gray-500 uppercase tracking-widest font-bold">No data in transmission. Be the first to leave a review.</p>
                                         </div>
                                     ) : (
-                                        product.reviews.map((review) => (
-                                            <motion.div
-                                                initial={{ opacity: 0, y: 20 }}
-                                                whileInView={{ opacity: 1, y: 0 }}
+                                        product.reviews.map((review, i) => (
+                                            <div
                                                 key={review._id}
-                                                className="bg-zinc-900/30 border border-white/5 p-8 rounded-2xl space-y-4 hover:border-white/10 transition-colors"
+                                                className="bg-zinc-900/30 border border-white/5 p-8 rounded-2xl space-y-4 hover:border-white/10 transition-colors animate-slide-in-up"
+                                                style={{ animationDelay: `${i * 0.1}s` }}
                                             >
                                                 <div className="flex justify-between items-start">
                                                     <div>
@@ -253,8 +254,8 @@ export default function ProductDetailView({ product }: { product: Product }) {
                                                     </div>
                                                     <p className="text-[10px] text-gray-500 font-mono">{new Date(review.createdAt).toLocaleDateString()}</p>
                                                 </div>
-                                                <p className="text-gray-300 leading-relaxed italic">"{review.comment}"</p>
-                                            </motion.div>
+                                                <p className="text-gray-300 leading-relaxed italic">&quot;{review.comment}&quot;</p>
+                                            </div>
                                         ))
                                     )}
                                 </div>
@@ -299,7 +300,7 @@ function ReviewForm({ productId, onReviewAdded }: { productId: string, onReviewA
                 const error = await res.json();
                 toast.error("DUPLICATE ENTRY DETECTED", { description: error.message });
             }
-        } catch (err) {
+        } catch {
             toast.error("TRANSMISSION FAILED", { description: "Please check your network link." });
         } finally {
             setLoading(false);
